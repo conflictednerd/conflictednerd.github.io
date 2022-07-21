@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Categories on Conflicting Ideas</title>
-    <link>http://conflictednerd.github.io/categories/</link>
+    <link>https://conflictednerd.github.io/categories/</link>
     <description>Recent content in Categories on Conflicting Ideas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Jul 2022 15:55:39 +0430</lastBuildDate><atom:link href="http://conflictednerd.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 21 Jul 2022 15:55:39 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Et Cetra</title>
-      <link>http://conflictednerd.github.io/categories/et-cetra/</link>
+      <link>https://conflictednerd.github.io/categories/et-cetra/</link>
       <pubDate>Thu, 21 Jul 2022 15:55:39 +0430</pubDate>
       
-      <guid>http://conflictednerd.github.io/categories/et-cetra/</guid>
+      <guid>https://conflictednerd.github.io/categories/et-cetra/</guid>
       <description></description>
     </item>
     
