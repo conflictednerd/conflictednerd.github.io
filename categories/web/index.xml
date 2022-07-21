@@ -9,19 +9,19 @@
     <lastBuildDate>Thu, 21 Jul 2022 22:29:29 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/categories/web/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Setting Up Hugo with GitHub Pages</title>
-      <link>https://conflictednerd.github.io/posts/setting-up-hugo-with-github-pages/</link>
+      <link>https://conflictednerd.github.io/blog/setting-up-hugo-with-github-pages/</link>
       <pubDate>Thu, 21 Jul 2022 22:29:29 +0430</pubDate>
       
-      <guid>https://conflictednerd.github.io/posts/setting-up-hugo-with-github-pages/</guid>
+      <guid>https://conflictednerd.github.io/blog/setting-up-hugo-with-github-pages/</guid>
       <description>A simple guide on creating a webpage just like this!</description>
     </item>
     
     <item>
       <title>Hello World</title>
-      <link>https://conflictednerd.github.io/posts/hello-world/</link>
+      <link>https://conflictednerd.github.io/blog/hello-world/</link>
       <pubDate>Thu, 21 Jul 2022 15:55:39 +0430</pubDate>
       
-      <guid>https://conflictednerd.github.io/posts/hello-world/</guid>
+      <guid>https://conflictednerd.github.io/blog/hello-world/</guid>
       <description>The very first post in my website!</description>
     </item>
     
