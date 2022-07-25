@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>dialog on Conflicting Ideas</title>
+    <link>https://conflictednerd.github.io/tags/dialog/</link>
+    <description>Recent content in dialog on Conflicting Ideas</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 Jul 2022 20:00:12 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/dialog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Don Juan and the Devil</title>
+      <link>https://conflictednerd.github.io/fragments/don-juan-and-the-devil/</link>
+      <pubDate>Mon, 25 Jul 2022 20:00:12 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/fragments/don-juan-and-the-devil/</guid>
+      <description>A dialog between Don Juan and the devil.</description>
+    </item>
+    
+  </channel>
+</rss>

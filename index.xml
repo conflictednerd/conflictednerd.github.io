@@ -6,7 +6,25 @@
     <description>Recent content on Conflicting Ideas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Jul 2022 23:57:17 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Jul 2022 20:22:16 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction to Information Theory</title>
+      <link>https://conflictednerd.github.io/blog/introduction-to-information-theory/</link>
+      <pubDate>Mon, 25 Jul 2022 20:22:16 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/blog/introduction-to-information-theory/</guid>
+      <description>Introduction to information theory, definitions and basic theorems</description>
+    </item>
+    
+    <item>
+      <title>Don Juan and the Devil</title>
+      <link>https://conflictednerd.github.io/fragments/don-juan-and-the-devil/</link>
+      <pubDate>Mon, 25 Jul 2022 20:00:12 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/fragments/don-juan-and-the-devil/</guid>
+      <description>A dialog between Don Juan and the devil.</description>
+    </item>
+    
     <item>
       <title>Notes on Stochastic Processes</title>
       <link>https://conflictednerd.github.io/blog/notes-on-stochastic-processes/</link>
