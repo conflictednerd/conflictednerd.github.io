@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Conflicting Ideas</title>
+<meta name="keywords" content="">
+<meta name="description" content="Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)
+This short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:
+Those that use derivatives, be it first order (gradient descent) or higher order (Newton&rsquo;s method), Those that don&rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods.">
+<meta name="author" content="Saeed Hedayatian">
+<link rel="canonical" href="https://conflictednerd.github.io/blog/introduction-to-optimization/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://conflictednerd.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://conflictednerd.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://conflictednerd.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://conflictednerd.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://conflictednerd.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script><meta property="og:title" content="" />
+<meta property="og:description" content="Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)
+This short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:
+Those that use derivatives, be it first order (gradient descent) or higher order (Newton&rsquo;s method), Those that don&rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://conflictednerd.github.io/blog/introduction-to-optimization/" /><meta property="article:section" content="blog" />
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)
+This short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:
+Those that use derivatives, be it first order (gradient descent) or higher order (Newton&rsquo;s method), Those that don&rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "https://conflictednerd.github.io/blog/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "",
+      "item": "https://conflictednerd.github.io/blog/introduction-to-optimization/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "name": "",
+  "description": "Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)\nThis short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:\nThose that use derivatives, be it first order (gradient descent) or higher order (Newton\u0026rsquo;s method), Those that don\u0026rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)\nThis short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:\nThose that use derivatives, be it first order (gradient descent) or higher order (Newton’s method), Those that don’t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods. The optimization problem itself can also take two general forms: constrained or unconstrained.\nIntroduction The Optimization Problem In its most general form, an optimization problem has the following form: $$ \\mathrm{minimize};; f(x) ;;\\mathrm{subject;to} ;; x \\in \\Omega \\subseteq \\R^n. $$ Furthermore, the following assumptions commonly hold:\n$f: \\Omega \\to \\R$ is a smooth function, The feasible set, $\\Omega$, is defined by finitely many smooth constraints. The solution to this problem is a point $x^* \\in \\Omega$ in which $f$ attains its minimum value. We are sometimes also interested in local minimizers; these are points such as $x^* \\in \\Omega$ for which a neighborhood $\\mathcal{N}(x^, \\delta)$ exists such that $f(x)\\geqslant f(x^)$ for all $x \\in \\Omega \\cap \\mathcal{N}(x^*, \\delta)$.\nIn the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.\nLinear and Quadratic Optimization Two simple, yet important special cases of the optimization problem are linear and quadratic optimization.\nIn linear optimization (programming), the objective function $f$ and the constraints that define $\\Omega$ are all linear functions. So, a linear optimization problem has the following form: $$ \\min_{x\\in \\R^n} c^Tx ;; \\mathrm{subject; to} \\ a_i^Tx = b_i, ;;; \\forall i \\in I, \\ a_j^Tx\\geqslant b_j ;;; \\forall j \\in J. $$ Quadratic programming is similar in that the constraints are linear, but the objective function becomes quadratic: $$ \\min_{x\\in \\R^n} c^Tx + \\frac{1}{2}x^THx ;; \\mathrm{subject; to} \\ a_i^Tx = b_i, ;;; \\forall i \\in I, \\ a_j^Tx\\geqslant b_j ;;; \\forall j \\in J. $$\nSolutions and Derivatives Before talking about the algorithms for solving optimization problem, it is useful to see the relation between minimizers and the derivatives. In a nutshell, this section is trying to generalize the simple idea of “a minimizer is where the derivative is zero and the second derivative is positive” that we know from single-variable calculus.\nNotice that in this section we are concerned with unconstrained problems. Optimality conditions for constrained problems are more complicated, though they make use of some of these ideas. We will briefly talk about optimality conditions for constrained problems in another section.\nFirst Order Optimality Condition Theorem: Suppose $f \\in \\mathcal{C}^1(\\R^n)$ (it’s differentiable with a smooth derivative) and that $x^$ is a local minimizer of $f$. Then, $x^$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^$ is zero. $$ x^ \\mathrm{;is;local;minimizer;of;} f \\implies \\nabla f (x^*) = 0. $$ An Aside: Remember that $\\nabla f (x) = [\\frac{\\partial f}{\\partial x_1}(x), \\cdots,\\frac{\\partial f}{\\partial x_n}(x)]^T$.\nSecond Order Optimality Condition Not all stationary points are minimizers. A stationary point may be a saddle point or even a maximizer! So, we need to add some other condition if we are to distinguish minimizers from other types of stationary points. The second order necessary condition gives us precisely this.\nTheorem: Suppose $f\\in \\mathcal{C}^2(\\R^n)$ and that $x^$ is a local minimizer of $f$. Then, $\\nabla^2f(x^)$ is positive-semidefinite.\nWe also have a second order sufficient condition:\nTheorem: Suppose $f\\in \\mathcal{C}^2(\\R^n)$ and that $x^\\in \\R^n$ is such that $\\nabla f(x^) = 0$ and $\\nabla^2f(x^)$ is positive-definite. Then, $x^$ is surely a local minimizer of $f$.\nAn Aside: Remember that $\\nabla^2f(x)$ is a matrix, called the Hessian, defined as $$ \\nabla^2 f(x) = \\begin{bmatrix} \u0026\\frac{\\partial^2 f}{\\partial x_1^2}(x), \\cdots, \u0026\\frac{\\partial^2 f}{\\partial x_1\\partial x_n}(x) \\ \u0026\\vdots \\ddots \u0026\\vdots \\ \u0026\\frac{\\partial^2 f}{\\partial x_n \\partial x_1}(x), \\cdots, \u0026\\frac{\\partial^2 f}{\\partial x_n^2}(x) \\end{bmatrix}. $$ Notice that the Hessian matrix is always symmetric. This is particularly convenient, as it means that the Hessian is diagonalizable and its eigenvectors can be chosen to be orthonormal.\nAnother Aside: Remember that a symmetric matrix $M$ is called positive-definite if for all vectors $x\\in \\R^n \\backslash {0}$, we have $x^TMx \u003e 0$. Similarly, $M$ is positive-semidefinite if $x^TMx \\geqslant 0$.\nAlternatively, we could say that $M$ is positive-definite iff all its eigenvalues are positive and it is positive-semidefinite iff all its eigenvalues are non-negative. It is often useful to think of definiteness like this, in terms of eigenvalues.\nNow let’s revisit the second order optimality conditions. A stationary point can be a (local) minimizer only if the Hessian at that point is positive-semidefinite (necessary condition). However, if the Hessian is positive-definite, we can be certain that the point is a minimizer (sufficient condition).\nFinding Derivatives Many of the methods that we will discuss rely on derivatives (and sometimes Hessians). Therefore, it is nice to understand how we might provide derivatives to solvers before discussing the methods themselves. When the objective and the constraints are simple, we can of course compute their derivatives by hand and write code that explicitly computes gradients at each point. But often, this is not possible and we have to calculate (or approximate) derivatives automatically. There are several methods to do this:\nAutomatic Differentiation: These methods break down the code that evaluates $f$ into elementary arithmetic operations and compute the derivatives using chain rule. Think of modern deep learning frameworks such as PyTorch, TensroFlow, JAX. Symbolic Differentiation: These methods can be thought of as an extension to the differentiate-by-hand method. They manipulate the algebraic expression of $f$ (when available) and compute the derivative. Think of symbolic packages of MAPLE, MATLAB, MATHEMATICA. Finite Differences: When we expect $f$ to be smooth and without much noise, finite differences methods can be used to approximate the gradients. When we don’t have an nicely formed expression for evaluating $f$, but nevertheless can evaluate it efficiently (e.g., evaluation may involve running a simulation) we can use these methods. Unconstrained Optimization Generic Method Consider the problem of minimizing a function $f$ over the $\\R^n$. In derivative-based methods that are discussed below, we assume $f\\in \\mathcal{C}^1(\\R^n)$ or $f\\in \\mathcal{C}^2(\\R^n)$.\nConsider the very generic iterative method below:\nGeneric Method(GM):\rStart with an initial guess $x_0$.\rwhile Termination criteria not reached:\rCompute a change vector $v$ based on the previous guess and the data\r$x_{k+1} = x_k + v$\r$k = k+1$ Now by filling in the gaps we can get different algorithms.\nTermination Criteria: The most often used stopping condition is to check if the gradient has become too small, i.e., $||\\nabla f(x_k)||\u003c\\epsilon$ along with the decreasing property, i.e., $f(x_{k+1}) \u003c f(x_k)$. But we can also use some more complicated eigenvalue-based criteria as well. In most cases though, we just check the norm of the gradient. Computing The Change Vector: This is where the most variation in algorithms can be seen. How are we to find a vector $v$ following which allows us to further minimize the value of $f$? There are different approaches to finding this vector (line-search, trust region) that will be discussed below. But, at the heart of all these methods is a simple idea: we can use a simple, local model $m_k$ to approximate $f$ around $x_k$, and then try to minimize $m_k$. When we have access to derivatives, we can choose $m_k$ to be a linear or quadratic function based on the Taylor expansion of $f$. Of course this approximation will not work great if we move too far away from $x_k$, so we have to take that into consideration when computing $v$. Before presenting any concrete algorithms, it is useful to mention some desirable properties that we would like to have in an iterative algorithm. Ideally, we want to our algorithm to converge globally, meaning that the algorithm converges and terminates, regardless of the starting point (not to be confused with convergence to global minima!). If that is not possible, we would like to have some local convergence guarantee, meaning that the algorithm converges to a local minimizer or stationary point when we start sufficiently close to one. One final consideration is the speed of convergence. We would like to have algorithms that not only converge, but do so quickly!\nWith these considerations in mind, we proceed to give the first algorithms for solving the optimization problem, based on the general recipe of the Generic Method.\nLine-search Methods Line-search methods work by first finding a descent direction $s_k\\in\\R^n$, and then computing a step size $\\alpha_k\u003e0$ such that $f(x_k + \\alpha_k s_k) \u003c f(x_k)$.\nDescent Direction: A descent direction is a vector $s_k$ that if we take a sufficiently small step in its direction, will take us to a point where the value of $f$ is smaller. $-\\nabla f(x_k)$ is one such direction that we can use. Generally speaking, any vector $s_k$ that satisfies $\\nabla f(x_k)^T s_k \u003c 0$ is a descent direction (Think of directional derivatives!).\nStep Size: Given a direction $s_k$, we now have to compute a step-size $\\alpha_k\u003e0$ along $s_k$ such that $$ f(x_k + \\alpha_k s_k) \u003c f(x_k). $$ Because $s_k$ is a descent direction, we know that a very small step size will satisfy the above inequality. But we also want the step size to be as large as possible, so that we converge faster. Fundamentally, line-search is a method for selecting an appropriate step size. So, we will first discuss the line-search methods for finding good step-sizes, and then talk about the choice of the descent direction (steepest descent is not always the best choice!).\nExact Line-search Exact line-search finds the optimal step-size by solving an inner single-variable optimization $$ \\alpha_k = \\arg \\min_{\\alpha\u003e0} f(x_k + \\alpha s_k). $$ This step size is optimal in the sense that $\\alpha_k s_k$ is the most decreasing step we can take in the direction of $s_k$. Additionally, this is a single variable optimization (the only variable is $\\alpha$) which is easier to solve than the full optimization that we had before. Unfortunately, repeatedly solving this inner optimization is computationally expensive for non-linear objectives.\nAn Aside: Conceptually, think of exact line-search as a method that shrinks the search space from $\\R^n$ to a single line. What the full exact line-search does is finding a promising line in $\\R^n$ and searching along it to find a better solution.\nInexact Line-search Inexact line-search uses an step-size that may not be optimal, but is “good enough”, i.e., taking a step of that size will decrease $f$ by a “sufficient amount”, proportional to $\\alpha_k$ and $\\nabla f(x_k)^Ts_k$.\nOne way of defining this sufficient amount is by using the Armijo condition. Let $\\Phi_k (\\alpha) := f(x_k + \\alpha s_k)$. The Armijo condition requires that $$ \\Phi_k(\\alpha_k) \\leqslant y_\\beta(\\alpha_k) := \\Phi_k(0) + \\beta\\alpha_k\\Phi’(0), $$ for some $\\beta \\in (0, 1)$.\nAn algorithm that uses the Armijo condition will start with some large, initial step size $\\alpha_k$, and backtracks (binary search style!) to find an $\\alpha_k$ that satisfies the above condition. (What should the initial step size be? Sometimes we just start with 1 agnostically, but there are some very interesting methods for “guessing” a good starting value!)\nIntuitively, what is the Armijo condition doing? Like the exact line-search, we are restricting $f$ to a line defined by the direction of $s_k$. This restricted version is $\\Phi_k$. Exact line-search minimizes $\\Phi_k$. However, here we are finding the line that is tangent to $\\Phi_k$ at $0$, rotate it upwards by a small amount determined by $\\beta$, and just find any point that is below this rotated line. The more we rotate the tangent, the easier it will be to find a point that lies below it, but also the more inaccurate (and suboptimal) the resulting step size may be.\nThe figure below may be helpful to better understand this. Notice that $\\Phi(\\alpha)$ is the restricted version of $f$, $y_1(\\alpha)$ is the tangent to it at zero, and $y_{0.6}(\\alpha)$ is its the rotated version. Selecting any point at which $\\Phi$ is below this line will result in a “sufficiently good” step size.\nSteepest Descent Choosing $s_k$ to be the negative gradient and using any line-search method will give an algorithm that is often called the method of steepest descent. Notice that the line-search, be it exact or with Armijo-like conditions, is key here, as it allows us to show some nice convergence properties. The next theorem, showcases this.\nTheorem: Let $f$ be sufficiently smooth (i.e., $\\nabla f$ is Lipschitz continuous) and bounded from below. The method of steepest descent globally converges, meaning that $$ ||\\nabla f(x_k)|| \\to 0 ;; \\mathrm{as} ;; k \\to \\infty. $$ Although steepest descent (SD) converges, it does so slowly. This is because SD is scale-dependent. Look at the Contour plots below and the evolution of the SD solution. In the first plot, SD (exact line-search) is able to find the minimizer in one step. However, if the problem becomes slightly ill-conditioned, as is in the second plot, it will take much longer for SD to converge.\nAn Aside: SD converges linearly and the condition number of the Hessian matrix determines the rate of convergence for SD. This highlights the issue with SD: because it doesn’t take the curvature (Hessian) into account, it may perform poorly. As can be seen in the plots above, taking the direction of steepest descent is not always the best choice.\nBeyond Steepest Descent As we saw, SD with line-search can have very slow convergence rates. The simplest way for dealing with the ill-conditioning that was mentioned is to simply scale our variables (batch normalization in neural nets claims to be doing this!). Second order methods, headlined by the famous Newton’s method, use the Hessian (or an approximation of it) to automatically address this issue. In this section, general ideas behind these methods are presented without going into much details about the specificities of the algorithms.\nNewton’s Method Let’s revisit how we ended up with $-\\nabla f(x_k)$ as the descent direction. In essence, we approximated $f$ near $x_k$ with a linear model. Using the Taylor expansion, this linear model was $$ m_k(s) = f(x_k) + \\nabla f(x_k)^T s. $$ Now, if we want to minimize this function (subject to $||s|| = ||\\nabla f(x_k)||$ to bound the values from below), we should let $s=-\\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.\nThe idea behind Newton’s method is to use a second order approximation to $f$. Suppose $B_k$ is a symmetric positive-definite matrix and that we choose to locally approximate $f$ by $$ m_k(s) = f(x_k) + \\nabla f(x_k)^T s +\\frac{1}{2}s^TB_ks. $$ Because $B_k$ is positive-definite, this quadratic function has a unique minimum that can be found by: $$ \\nabla_s m_k(s^) = 0 \\implies -\\nabla f(x_k) = B_ks^. $$ So, to find the direction of descent we must solve this system of linear equations for $s^*$.\nOne question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^*$ is a descent direction: $$ s^T\\nabla f(x_k) \u003c 0 \\implies -s^TB_ks \u003c 0 \\implies s^TB_ks \u003e0. $$ If $\\nabla^2 f(x_k)$ is positive-definite, we can let $B_k = \\nabla^2 f(x_k)$ as this would result in the best quadratic approximation of $f$ (Taylor expansion). This choice gives raise to an algorithm known as the damped Newton method.\nHowever, the Hessian need not be positive-definite, it may be that its positive-semidefinite. So this choice of $B_k$ requires $f$ to be locally strictly convex everywhere! Even if this is the case, we still need a number of additional assumptions to prove global convergence. To summarize, Newton’s method\nis scale-invariant (solves the issue with steepest descent), can speed up convergence (quadratic convergence) for functions with positive-definite Hessians, has no global convergence guarantees, even worse, it may not converge at all for some simple examples. Modified Newton Method When the Hessian is not positive-definite, we can “perturb” it a little so that it becomes sufficiently positive definite. In modified Newton method the descent direction is found by solving a slightly different system of linear equaitons: $$ (\\nabla^2 f(x_k) + M_k)s_k = -\\nabla f(x_k), $$ where $M_k$ is chosen such that $\\nabla^2 f(x_k) + M_k$ is “sufficiently” positive-definite. Here, we will not get into the details of computing $M_k$.\nThis allows Newton’s method to be used with general objectives that don’t necessarily have positive-definite Hessians. However, we still need some additional assumptions to guarantee their global convergence.\nQuasi-Newton Methods When we don’t have access to second order derivatives, we can use a class of methods called quasi-Newton methods, to compute an approximation of the Hessian, $B_k \\approx \\nabla^2 f(x_k)$. A very general description of these methods is as follows: we start by an initial guess, $B_0$. After computing $s_k$ by solving $B_ks_k = -\\nabla f(x_k)$ and setting $x_{k+1} = x_k + \\alpha_ks_k$, we compute a (cheap) update $B_{k+1}$ of $B_k$.\nAgain, we don’t go into the details of how $B_k$ is updated. There are several methods that use this idea. BFGS and DFP are two of the most important ones that are considered to be state-of-the-art for unconstrained optimization.\nQuasi-Newton methods are faster than Newton’s method, they require $\\mathcal{O}(n^2)$ calculations per iteration as opposed to the $\\mathcal{O}(n^3)$ required by Newton’s method. They also converge faster (in fewer iterations) compared to steepest descent methods, as they leverage curvature information.\nLine-search Wrap-up In this final section, let’s put all the things that we saw about line-search together so that we can have a clear idea of what line-search methods are doing.\nAt the $k$-th step, line-search methods locally approximate the non-convex objective function $f$ with a simple model $m_k$. This model can be linear, in which case it has the form $m_k(s) = f(x_k) + \\nabla f(x_k)^Ts$ or quadratic, in which case it has the form $m_k(s) = f(x_k) + \\nabla f(x_k)^Ts + \\frac{1}{2}s^TB_k s$. When we have access to the Hessian, we can use $B_k = \\nabla^2 f(x_k)$, otherwise, we can use estimates of the Hessian.\nOnce we have this model $m_k$, we use it to find a descent direction, $s_k$. This direction is found by minimizing the model, $m_k$. In the case of a linear model, this direction is $-\\nabla f(x_k)$ and in the case of the quadratic model it is the solution to $B_ks_k = -\\nabla f(x_k)$. Notice two important points:\nWhen we use a linear model, $m_k$ is not bounded from below. Therefore, we can’t minimize it. To address this issue, we actually solve the constrained optimization $\\min_{s}m_k(s)$ subject to $||s||\u003c\\nabla f(x_k)$. When we use a quadratic model, $m_k$ is not bounded from below unless it is a convex, which is the case if and only if $B_k$ is positive-definite. So, when $B_k$ is not positive-definite, we perturb it. In essence, we locally approximate $f$ with a convex quadratic, even if $f$ is not locally convex. This means that our model may no longer be the most accurate local approximation. Finally, when we have a descent direction we need to find a suitable step size $\\alpha_k$ so that taking a step of this size in the descent direction results in a “sufficient decrease” in the value of $f$. To find this step size we use either exact line search or Armijo-like conditions.\nThis wraps-up our discussion of line-search methods.\nTrust-region Methods The basic idea behind line-search methods is “I know which direction I want to go, find me the largest step I can take in that direction to ensure sufficient progress in minimizing $f$”. Trust-region methods take the opposite approach; their methodology is “I know the maximum step size I want to take, find me the best direction to follow”. This nicely illustrates the main idea behind trust-region methods as well as its differences compared to line-search methods.\nLet’s begin our discussion of trust-region methods (TR). Similar to line-search, we begin by approximating $f(x_k + s)$ by a quadratic model $$ m_k(s) = f(x_k) + \\nabla f(x_k)^T s + \\frac{1}{2} s^T B_k s, $$ where $B_k$ is some symmetric (but not necessarily positive-definite) approximation of $\\nabla^2 f(x_k)$. This model has two possible issues:\nIt may not resemble $f(x_k +s)$ for large values of $s$, It may be unbounded from below: if $m_k$ is not convex, it will be unbounded and we can’t meaningfully talk about minimize it. Trust-region methods prevent bad approximations by “trusting” the model only in a trust region, defined by the trust-region constraint $$ ||s|| \\leqslant \\Delta_k $$ for some appropriate radius $\\Delta_k$.\nThis constraint also addresses the second issue by not allowing the model to be unbounded.\nThe Trust-region Subproblem: We refer to the minimization of the model subject to the trust region constraint as the trust-region subproblem: $$ \\min_{s\\in \\R^n} m_k(s) ;;\\mathrm{subject;to} ;; ||s|| \\leqslant \\Delta_k $$ Notice that here, unlike in line-search, the model may be non-convex.\nSolving The Trust-region Subproblem:\nThere are various efficient ways for computing (or approximating) the solution of this constrained optimization problem. Here, we just briefly mention a few popular strategies:\nWe can solve this problem exactly, and find the global minimizer. This would result in a Newton-like trust-region method. In large-scale problems, we can solve it approximately, using iterative methods such as conjugate-gradient or Lancsoz method. Now, let’s assume that we have the solution $s_k$ to the trust-region subproblem. How should we use it to take an optimization step?\nThe predicted model decrease from taking the step $s_k$ is $$ m_k(0) - m_k(s_k) = f(x_k) - m_k(s_k). $$ The actual function decrease is $$ f(x_k) - f(x_k + s_k). $$ Consider the ratio of these two $$ \\rho_k := \\frac{f(x_k) - f(x_k + s_k)}{f(x_k) - m_k(s_k)}. $$ If in the current trust-region $m_k$ is a good model for $f$, we expect $\\rho_k$ to be close to $1$. If $\\rho_k$ is much smaller than $1$, it means that our trust region is too large and the model can not accurately approximate $f$ in this region. This means that we have to decrease the radius of the trust region. So, the trust region radius $\\Delta_k$ will be updated based on $\\rho_k$:\nIf $\\rho_k$ is not too smaller than $1$, take an optimization step $x_{k+1} = x_{k} + s_k$ and increase the trust region radius, $\\Delta_{k+1} \\geqslant \\Delta_k$. If $\\rho_k$ is much smaller than $1$, shrink the trust region without taking any steps: $x_{k+1} = x_{k}$, $\\Delta_{k+1} \u003c \\Delta_k$. (One simple way to shrink or expand $\\Delta_k$ is by multiplying or dividing by $2$)\nWhat about convergence? Under similar assumptions to those of the steepest descent, this general recipe for trust-region optimization converges globally! But note that unlike steepest descent, we can use a wide variety of methods for computing the descent direction: we can use Newton or Quasi-Newton methods, approximate methods, etc.\nThis section ends by mentioning some remarks about line-search and trust-region methods.\nQuasi-Newton methods and approximate derivatives can be used within the trust-region framework (Note that we don’t need positive-definite updates for the Hessian) There are state-of-the-art implementations of both line-search and trust-region methods. Generally, they have similar performances and choosing between the two is now mostly a matter of taste. Constrained Optimization Preliminaries In this chapter we move on to study constrained optimization problems. Again, we have an objective function $f: \\R^n \\to \\R$ that we want to minimize. But now, we have a set of equality and inequality constraints that our solution must satisfy. These constraints are smooth, but can be very complicated functions. Furthermore, although each of them is smooth, their union may specify a feasible region with a lot of “rough edges”. Consider linear programming for instance: there all of the constraints are linear, but the feasible region can be a polygon with many sides and sharp corners. In fact, this is precisely what makes linear programming hard.\nMathematically, a constrained optimization problem is formulated as $$ \\min_{x\\in \\R^n} f(x) ;; \\mathrm{subject; to} \\ c_E(x) = 0, \\ c_I(x) \\geqslant 0, $$ where $f: \\R^n \\to \\R$ is a smooth objective function and $E, I$ are index sets. By $c_I(x) \\geqslant 0$ we mean $c_i(x) \\geqslant 0$ for all $i\\in I$, and similarly for $c_E$. All of the constraints $c_i$ are smooth functions.\nWe refer to the set of points that satisfy the constraints as the feasible region, denoted by $\\Omega$: $$ \\Omega = {x\\in \\R^n: c_E(x) = 0, ; c_I(x) \\geqslant 0} $$\nCharacterizing Solutions As we saw in the first chapter, solutions to an unconstrained optimization problem could be characterized in terms of derivatives. In particular, we saw that any minimizer has to be an stationary point for $f$. This is not necessarily the case in constrained optimization. A minimizer may be a boundary point (located on the boundary of the feasible regions) in which case it doesn’t have to be an stationary point of $f$. The plot below shows an example of this where the global minimizer of the blue function within the region defined by the red lines is a boundary point with non-zero derivative.\nThe analogue of stationarity in constrained problems is the Karush-Kuhn-Tucker (KKT) conditions. KKT condition helps us characterize solutions in terms of derivatives. $$ \\mathrm{unconstrained ; problems} \\longrightarrow \\hat{x};\\mathrm{is ; stationary ; point}; (\\nabla f(\\hat{x}) = 0) \\ \\mathrm{constrained ; problems} \\longrightarrow \\hat{x};\\mathrm{is ; KKT ; point} $$ To introduce the KKT conditions, we first need to define the Lagrangian function of a constrained optimization problem.\nThe Lagrangian function of a constrained optimization problem is defined as $$ \\mathcal{L}(x, y, \\lambda) := f(x) - \\sum_{j\\in E} {y_j c_j (x)} - \\sum_{i\\in I} {\\lambda_i c_i(x)}. $$ The values $y, \\lambda$ are known as Lagrange multipliers. The Lagrangian compresses the objective and the constraints of a problem into a single expression.\nA point $\\hat x$ is a KKT point of a constrained problem if multipliers $(\\hat y, \\hat \\lambda)$ exist such that\n$\\hat x$ is an stationary point of the Lagrangian for these multipliers, i.e., $\\nabla_x \\mathcal{L}(\\hat x, \\hat y, \\hat \\lambda) = 0$, the multipliers for inequalities are non-negative, i.e., $\\hat \\lambda \\geqslant 0$, only active constraints matter at $\\hat x$, i.e., for all $i\\in I$, $\\hat \\lambda_i c_i (\\hat x) = 0$, $\\hat x$ is feasible, i.e., $c_E(\\hat x) = 0$, $c_I(\\hat x) \\geqslant 0$. Condition 3 may be a bit strange, so let’s focus on that a little. It asserts that $\\hat\\lambda_i c_i(\\hat x)$ must be zero for all inequality constraints. This means that either $c_i(\\hat x) = 0$ or otherwise, $\\hat\\lambda_i = 0$. If $c_i(\\hat x) = 0$, it means that $\\hat x$ is on the boundary of the region defined by the $i$-th inequality constraint. When this is the case, we call the $i$-th constraint “active”. Therefore, the multipliers must be zero for any inactive condition. This makes sense, because if a condition is inactive, it means that $\\hat x$ is in the interior of the region determined by that condition (either on the feasible side or on the infeasible side). If this is the case, we are not concerned with that condition, because it is “far away” from us.\nTo further illustrate this, look at the example plotted in the beginning of this section. There we have two inequality constraints: $x- 2\\geqslant 0$, $9-x \\geqslant 0$. When we want to investigate the optimality of $\\hat x = 2$ the first condition is active, as we are on the boundary of the region defined by this constraint. The second condition, in contrast, is inactive, as we are away from it’s boundary. To investigate the optimality of $\\hat x$, it doesn’t matter if the second condition is $9-x\\geqslant0$ or $1000 - x \\geqslant 0$. So effectively, we don’t have to consider this condition. Therefore, the third condition requires the multiplier corresponding to this constraint to be zero, i.e., this condition is not included in the Lagrangian.\nAlso, note that the condition 4 ensures that we are on the “correct side” of inactive conditions.\nWith these in mind, let’s take a closer look at condition 1. The gradient of the Lagrangian with respect to $x$ is $$ \\nabla_x \\mathcal{L}(\\hat x, \\hat y, \\hat \\lambda) = \\nabla f(x) - \\sum_{j\\in E} {y_j \\nabla c_j (x)} - \\sum_{i\\in I} {\\lambda_i \\nabla c_i(x)}. $$ If we take it to be zero, we get $$ \\nabla_x \\mathcal{L}(\\hat x, \\hat y, \\hat \\lambda) = 0 \\ \\implies \\nabla f(x) = \\sum_{j\\in E} {y_j \\nabla c_j (x)} + \\sum_{i\\in I} {\\lambda_i \\nabla c_i(x)}. $$ In words, condition 1 is maintaining that at a KKT point, the gradient of the objective must be a linear combination of the gradients of (active) constraints.\nA Caveat: In general, not every KKT point is an optimal point for the constrained optimization problem. We also need the constraints to satisfy some regularity assumptions known as constraint qualifications in order to derive necessary optimality conditions (for instance, the feasible region defined by the constraints must have an interior). A good news is that if the constraints are linear (as is the case for linear and quadratic programming), no constraint qualification is required.\nTheorem [First order necessary conditions]: Under suitable constraint qualification, any local minimizer of a constrained optimization problem, is a KKT point.\nMethods Quadratic Penalty (Equality Constraints) Let’s focus our attention on optimization problems that only have equality constraints. We can formulate these problems as $$ \\min_{x\\in\\R^n} f(x) ;;\\mathrm{subject;to} ;; c(x) = 0, $$ where $f:\\R^n\\to\\R$ and $c:\\R^n\\to\\R^m$ are smooth functions.\nOne idea for solving such problems is to form a single, parametrized and unconstrained objective, whose minimizers approach the solutions to the initial problem as the parameter value varies.\nThe quadratic penalty function is one such function. It is defined as $$ \\Phi_\\sigma (x) := f(x) + \\frac{1}{2\\sigma}||c(x)||^2, $$ where $\\sigma \u003e 0$ is the penalty parameter. Now instead of solving the original problem, we solve the unconstrained minimization of $\\Phi_\\sigma$.\nNotice that a minimizer of $\\Phi_\\sigma$ does not necessarily satisfy the constraint. But, as we let $\\sigma \\to 0$, we penalize infeasible points more and more, and force the solution to satisfy the constraint.\nWe could use any method for solving the unconstrained optimization of $\\Phi_\\sigma$ (line-search, trust-region, etc.).\nSome consideration:\nWe typically use simple schedules like $\\sigma_{k+1} = 0.1\\sigma_k$ or $\\sigma_{k+1} = \\sigma_k^2$ to decrease $\\sigma$.\nSay we optimized $\\Phi_{\\sigma_k}$ and found a minimizer $x_k$. When we decrease the value of $\\sigma_k$ and want to minimize $\\Phi_{\\sigma_{k+1}}$, we start the optimization from $x_k$. This kind of “warm starting” helps a lot in practice.\nAs $\\sigma$ approaches zero, $\\Phi_\\sigma$ becomes very steep in the direction of the constraint’s gradients (See the figure below). As a result, the optimization of $\\Phi_\\sigma$ becomes ill-conditioned. This is something that we have to keep in mind when minimizing $\\Phi_\\sigma$. For instance, first order methods will probably not work well. Additionally, when we want to use trust-region methods, it’s best if we scale the trust region to account for the ill-conditioning of the problem.\nOther effective ways of combating the ill-conditioning is to use change of variables or primal-dual variants, where we compute explicit changes in both $x$ and constraint multipliers $\\lambda$.\nPutting these ideas together, the quadratic penalty method has the following structure.\nQuadratic Penalty Method(QP):\rStart with an initial value of $\\sigma_0\u003e0$\rk = 0\rwhile not converged:\rChoose $0 \u003c \\sigma_{k+1} \u003c \\sigma_k$\rStarting from $x_k^{(0)}$ (Possibly $x_k^{(0)} = x_{k}$), use an unconstrained minimization algorithm to find an approximate minimizer $x_{k+1}$ of $\\Phi_{\\sigma_{k+1}}\r$k = k+1$ Interior Point (Inequality Constraints) Now let’s see how we can deal with inequality constraints. For the sake of simplicity, assume that we only have inequality constraints. So our problem can be written as $$ \\min_{x\\in\\R^n} f(x) ;;\\mathrm{subject;to} ;; c(x) \\geqslant 0, $$ where $f:\\R^n\\to\\R$ and $c:\\R^n\\to\\R^m$ are smooth functions.\nAgain, the idea is to turn this into an unconstrained optimization. Barrier function methods are one way of doing this. For $\\mu \u003e 0$, the corresponding logarithmic barrier subproblem is defined as $$ \\min_{x\\in \\R^n} f_\\mu := f(x) - \\mu\\sum_{i} \\log c_i(x) \\ \\mathrm{subject; to} ;; c(x) \u003e 0. $$ Notice that in essence, this is an unconstrained optimization because the log barrier prevents the optimization algorithm to “go over” the constraint boundary. Let’s focus on this a bit more. How does the log transformation help us stay inside the feasible region? Consider what happens at the boundaries of the constraints. If we get close to the boundaries of the $i$-th constraint, the $\\log$ term approaches $-\\infty$. Thus, the value of the barrier function gets very large. This means that if we are at a point $x$ inside the feasible region and take an optimizing, step we will stay inside the feasible region because the barrier function increases sharply as we get closer to the boundary, provided that the optimizing step is not so large that we go over the barrier entirely (which can be guaranteed by forcing our line-search or trust-region method to respect $c(x) \u003e 0$ when computing their step sizes). Therefore, we are guaranteed to stay inside the feasible region.\nBut there is a drawback to this. First, note that the $\\log$ terms also change the landscape inside the feasible region. So a solution to the logarithmic barrier subproblem is not necessarily a local minimizer of the original objective. Furthermore, the local minimizer of the original objective may be on the boundary! If this is the case, the logarithmic subproblem will never reach it.\nTo solve these issues, we do something similar to what we did with the quadratic penalty function: We iteratively decrease $\\mu$ and minimize $f_\\mu$, warm-starting from the solution of the previous iteration.\nThe basic barrier method is presented below.\nBasic Barrier Method(B):\rStart with an initial value of $\\mu_0\u003e0$\rk = 0\rwhile not converged:\rChoose $0 \u003c \\mu_{k+1} \u003c \\mu_k$\rStarting from a point $x_k^{(0)}$ satisfying $c(x_k^{(0)}) \u003e 0$ (Possibly $x_k^{(0)} = x_{k}$), use an unconstrained optimization algorithm to find an approximate minimizer $x_{k+1}$ of $f_{\\mu_{k+1}}. Ensure that the optimizer doesn't take large steps that will result in an infeasible point.\r$k = k+1$ Some considerations:\nInterior point methods require us to find at least one feasible point to get started. This may not always be trivial! Because the barrier function blows up near the boundaries, optimizing $f_\\mu$ is again ill-conditioned. The problem here is much worse than in penalty methods (the barrier function literally goes to infinity!), so much that we have to use primal-dual methods. In implementations, it is essential to keep iterates away from the boundaries early in the iterations. Otherwise, we may get trapped near the boundary which makes convergence very slow. Derivative-Free Optimization Consider the (unconstrained) optimization problem of minimizing $f:\\R^n \\to \\R$. Even when $f$ is smooth, we may want to use derivative-free methods to solve this problem. This may be because:\nExact first derivatives are unavailable: $f(x)$ may be given by a black box, propriety code or a simulation. Computing $f(x)$ for any given $x$ is expensive: $f(x)$ may be given by a time-consuming numerical simulation or lab experiments. Numerical approximation of $\\nabla f(x)$ is expensive or slow: Using finite-differencing for estimating the gradient may be too expensive. The values of $f(x)$ are noisy: When evaluation of $f(x)$ is inaccurate. For example when $f(x)$ depends on discretization, sampling, inaccurate data, etc. Then the gradient information is meaningless. What are some actual examples of such situations? One common and important case is hyperparameter tuning (e.g., in machine learning). In hyperparameter tuning derivative calculation is often impossible and evaluations are costly. Some other examples are parameter estimation, automatic error analysis, engineering design, molecular geometry, etc.\nThere are many derivative-free algorithms for optimization. Some examples are model-based methods, direct-search algorithms, pattern-search, Nelder-Mead and random search. These algorithms share some common characteristics:\nThey only use objective function values to construct iterates. Do not compute an approximate gradient. Instead, they form a sample of points (less tightly clustered than in finite-differences) and use the associated function values to construct $x_{k+1}$. They also control the geometry of the sample sets. They try to approximate local solution with “few” function evaluations. Asymptotic speed is irrelevant as they don’t have any optimality condition for termination. They are suitable for non-smooth and global optimization. There are also some limitations to these methods:\nThey work best when the problem is small in scale (order of $10^2$ variables). The objective function $f$ must be quite smooth. Model-Based Trust-Region Derivative-Free Optimization To illustrate how derivative-free methods work, we briefly discuss a model-based method. They underlaying idea is similar to what we did in derivative-based unconstrained optimization. Essentially, we want to create models of $f$ that are not based on the gradient. This means that we can’t use Taylor models. So how are we to create such models? The idea is to create a model by interpolating $f$ on a set of appropriately chosen sample points.\nAssume we have a sample set $Y = {y_1, \\cdots, y_q}$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \\in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\\leqslant f(y)$ for all $y\\in Y$.\nOur model $m_k(s)$ is again a simple linear or quadratic function of the following form $$ m_k(s) = c + s^Tg ;;(+\\frac{1}{2}s^THs), $$ where $c\\in\\R$, $g\\in \\R^n$ (, $H \\in \\R^{n\\times n}$) are unknowns. To find these unknowns, we don’t use gradients or Hessians! Instead, we compute them to satisfy the interpolation conditions for the set of sampled points: $$ \\forall y \\in Y ;; m_k(y - x_k) = f(y). $$ We need $q=n+1$ sample points to find the parameters of a linear model (i.e., $H=0$) and $q = \\frac{(n+1)(n+2)}{2}$ points for a quadratic model.\nOnce we have a model, we use it just like in the derivative-based trust-region method, i.e., (because $m_k$ is non-convex) we add a trust-region constraint and solve $$ s_k = \\arg \\min_{s\\in \\R^n} m_k(s) ;; \\mathrm{subject ; to} ;; ||s|| \\leqslant \\Delta_k. $$ We use $\\rho_k$ to measure progress and proceed exactly like in the derivative-based method.\nBecause recomputing $m_k$ requires many new function evaluations, we instead update it by removing one point from the sample set, $Y$, and replacing it with a new point.\nThis is a rough sketch for a model-based, trust-region, derivative-free algorithm. But note that a complete algorithm is much more involved, we must\nmake sure that the system of linear equations used for finding model parameters is non-singular, monitor the geometry of $Y$ to help with conditioning, have suitable strategies for adding and removing points from $Y$, … An Aside: One thing to note here is that we are not limited to linear and quadratic models. As long as we can minimize the model with the trust-region method, we are good to go! So based on the geometry of $f$, if we think that say, a sinusoidal function can better locally approximate it, we can use it as our model. Or if the number of variables, $n$, is too large, we may constrain $H$ to be a rank $1$ matrix or $g$ to be a sparse vector, thus reducing the number of parameters of the model.\n",
+  "wordCount" : "6505",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Saeed Hedayatian"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://conflictednerd.github.io/blog/introduction-to-optimization/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Conflicting Ideas",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://conflictednerd.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://conflictednerd.github.io/" accesskey="h" title="Home (Alt + H)">Home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://conflictednerd.github.io/blog" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://conflictednerd.github.io/fragments" title="Fragments">
+                    <span>Fragments</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://conflictednerd.github.io/categories/" title="Categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://conflictednerd.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://conflictednerd.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://conflictednerd.github.io/blog/">Blogs</a></div>
+    <h1 class="post-title">
+      
+    </h1>
+    <div class="post-meta">31 min&nbsp;·&nbsp;Saeed Hedayatian
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#optimization-an-introduction" aria-label="Optimization: An Introduction">Optimization: An Introduction</a><ul>
+                        
+                <li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a><ul>
+                        
+                <li>
+                    <a href="#the-optimization-problem" aria-label="The Optimization Problem">The Optimization Problem</a></li>
+                <li>
+                    <a href="#linear-and-quadratic-optimization" aria-label="Linear and Quadratic Optimization">Linear and Quadratic Optimization</a></li>
+                <li>
+                    <a href="#solutions-and-derivatives" aria-label="Solutions and Derivatives">Solutions and Derivatives</a><ul>
+                        
+                <li>
+                    <a href="#first-order-optimality-condition" aria-label="First Order Optimality Condition">First Order Optimality Condition</a></li>
+                <li>
+                    <a href="#second-order-optimality-condition" aria-label="Second Order Optimality Condition">Second Order Optimality Condition</a></li></ul>
+                </li>
+                <li>
+                    <a href="#finding-derivatives" aria-label="Finding Derivatives">Finding Derivatives</a></li></ul>
+                </li>
+                <li>
+                    <a href="#unconstrained-optimization" aria-label="Unconstrained Optimization">Unconstrained Optimization</a><ul>
+                        
+                <li>
+                    <a href="#generic-method" aria-label="Generic Method">Generic Method</a></li>
+                <li>
+                    <a href="#line-search-methods" aria-label="Line-search Methods">Line-search Methods</a><ul>
+                        
+                <li>
+                    <a href="#exact-line-search" aria-label="Exact Line-search">Exact Line-search</a></li>
+                <li>
+                    <a href="#inexact-line-search" aria-label="Inexact Line-search">Inexact Line-search</a></li>
+                <li>
+                    <a href="#steepest-descent" aria-label="Steepest Descent">Steepest Descent</a></li>
+                <li>
+                    <a href="#beyond-steepest-descent" aria-label="Beyond Steepest Descent">Beyond Steepest Descent</a><ul>
+                        
+                <li>
+                    <a href="#newtons-method" aria-label="Newton&amp;rsquo;s Method">Newton&rsquo;s Method</a></li>
+                <li>
+                    <a href="#modified-newton-method" aria-label="Modified Newton Method">Modified Newton Method</a></li>
+                <li>
+                    <a href="#quasi-newton-methods" aria-label="Quasi-Newton Methods">Quasi-Newton Methods</a></li></ul>
+                </li>
+                <li>
+                    <a href="#line-search-wrap-up" aria-label="Line-search Wrap-up">Line-search Wrap-up</a></li></ul>
+                </li>
+                <li>
+                    <a href="#trust-region-methods" aria-label="Trust-region Methods">Trust-region Methods</a></li></ul>
+                </li>
+                <li>
+                    <a href="#constrained-optimization" aria-label="Constrained Optimization">Constrained Optimization</a><ul>
+                        
+                <li>
+                    <a href="#preliminaries" aria-label="Preliminaries">Preliminaries</a><ul>
+                        
+                <li>
+                    <a href="#characterizing-solutions" aria-label="Characterizing Solutions">Characterizing Solutions</a></li></ul>
+                </li>
+                <li>
+                    <a href="#methods" aria-label="Methods">Methods</a><ul>
+                        
+                <li>
+                    <a href="#quadratic-penalty-equality-constraints" aria-label="Quadratic Penalty (Equality Constraints)">Quadratic Penalty (Equality Constraints)</a></li>
+                <li>
+                    <a href="#interior-point-inequality-constraints" aria-label="Interior Point (Inequality Constraints)">Interior Point (Inequality Constraints)</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#derivative-free-optimization" aria-label="Derivative-Free Optimization">Derivative-Free Optimization</a><ul>
+                        
+                <li>
+                    <a href="#model-based-trust-region-derivative-free-optimization" aria-label="Model-Based Trust-Region Derivative-Free Optimization">Model-Based Trust-Region Derivative-Free Optimization</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="optimization-an-introduction">Optimization: An Introduction<a hidden class="anchor" aria-hidden="true" href="#optimization-an-introduction">#</a></h1>
+<p>(Based on <a href="https://youtu.be/NSd6zOKZkpI">a lecture</a> by professor Coralia Cartis, university of Oxford)</p>
+<p>This short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:</p>
+<ol>
+<li>Those that use derivatives, be it first order (gradient descent) or higher order (Newton&rsquo;s method),</li>
+<li>Those that don&rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods),</li>
+<li>Inexact and probabilistic methods.</li>
+</ol>
+<p>The optimization problem itself can also take two general forms: constrained or unconstrained.</p>
+<h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<h3 id="the-optimization-problem">The Optimization Problem<a hidden class="anchor" aria-hidden="true" href="#the-optimization-problem">#</a></h3>
+<p>In its most general form, an optimization problem has the following form:
+$$
+\mathrm{minimize};; f(x) ;;\mathrm{subject;to} ;; x \in \Omega \subseteq \R^n.
+$$
+Furthermore, the following assumptions commonly hold:</p>
+<ul>
+<li>$f: \Omega \to \R$ is a smooth function,</li>
+<li>The feasible set, $\Omega$, is defined by <strong>finitely many</strong> smooth constraints.</li>
+</ul>
+<p>The solution to this problem is a point $x^* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in <em>local minimizers</em>; these are points such as $x^* \in \Omega$ for which a neighborhood $\mathcal{N}(x^<em>, \delta)$ exists such that $f(x)\geqslant f(x^</em>)$ for all $x \in \Omega \cap \mathcal{N}(x^*, \delta)$.</p>
+<p>In the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.</p>
+<img src="./resources/optima.png" style="zoom:50%;" />
+<h3 id="linear-and-quadratic-optimization">Linear and Quadratic Optimization<a hidden class="anchor" aria-hidden="true" href="#linear-and-quadratic-optimization">#</a></h3>
+<p>Two simple, yet important special cases of the optimization problem are linear and quadratic optimization.</p>
+<p>In linear optimization (programming), the objective function $f$ and the constraints that define $\Omega$ are all linear functions. So, a linear optimization problem has the following form:
+$$
+\min_{x\in \R^n} c^Tx ;; \mathrm{subject; to} \
+a_i^Tx = b_i, ;;; \forall i \in I, \
+a_j^Tx\geqslant b_j ;;; \forall j \in J.
+$$
+Quadratic programming is similar in that the constraints are linear, but the objective function becomes quadratic:
+$$
+\min_{x\in \R^n} c^Tx + \frac{1}{2}x^THx ;; \mathrm{subject; to} \
+a_i^Tx = b_i, ;;; \forall i \in I, \
+a_j^Tx\geqslant b_j ;;; \forall j \in J.
+$$</p>
+<h3 id="solutions-and-derivatives">Solutions and Derivatives<a hidden class="anchor" aria-hidden="true" href="#solutions-and-derivatives">#</a></h3>
+<p>Before talking about the algorithms for solving optimization problem, it is useful to see the relation between minimizers and the derivatives. In a nutshell, this section is trying to generalize the simple idea of <em>&ldquo;a minimizer is where the derivative is zero and the second derivative is positive&rdquo;</em> that we know from single-variable calculus.</p>
+<p>Notice that in this section we are concerned with <u>unconstrained problems</u>. Optimality conditions for constrained problems are more complicated, though they make use of some of these ideas. We will briefly talk about optimality conditions for constrained problems in another section.</p>
+<h4 id="first-order-optimality-condition">First Order Optimality Condition<a hidden class="anchor" aria-hidden="true" href="#first-order-optimality-condition">#</a></h4>
+<p><strong>Theorem:</strong> Suppose $f \in \mathcal{C}^1(\R^n)$ (it&rsquo;s differentiable with a smooth derivative) and that $x^<em>$ is a local minimizer of $f$. Then, $x^</em>$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^<em>$ is zero.
+$$
+x^</em> \mathrm{;is;local;minimizer;of;} f \implies \nabla f (x^*) = 0.
+$$
+<strong>An Aside:</strong> Remember that $\nabla f (x) = [\frac{\partial f}{\partial x_1}(x), \cdots,\frac{\partial f}{\partial x_n}(x)]^T$.</p>
+<h4 id="second-order-optimality-condition">Second Order Optimality Condition<a hidden class="anchor" aria-hidden="true" href="#second-order-optimality-condition">#</a></h4>
+<p>Not all stationary points are minimizers. A stationary point may be a saddle point or even a maximizer! So, we need to add some other condition if we are to distinguish minimizers from other types of stationary points. The second order necessary condition gives us precisely this.</p>
+<p><strong>Theorem:</strong> Suppose $f\in \mathcal{C}^2(\R^n)$ and that $x^<em>$ is a local minimizer of $f$. Then, $\nabla^2f(x^</em>)$ is <u>positive-semidefinite</u>.</p>
+<p>We also have a second order sufficient condition:</p>
+<p><strong>Theorem:</strong> Suppose $f\in \mathcal{C}^2(\R^n)$ and that $x^<em>\in \R^n$ is such that $\nabla f(x^</em>) = 0$ and $\nabla^2f(x^<em>)$ is <u>positive-definite</u>. Then, $x^</em>$ is surely a local minimizer of $f$.</p>
+<p><strong>An Aside:</strong> Remember that $\nabla^2f(x)$ is a matrix, called the <em>Hessian</em>, defined as
+$$
+\nabla^2 f(x) =
+\begin{bmatrix}
+&amp;\frac{\partial^2 f}{\partial x_1^2}(x), \cdots, &amp;\frac{\partial^2 f}{\partial x_1\partial x_n}(x) \
+&amp;\vdots \ddots &amp;\vdots \
+&amp;\frac{\partial^2 f}{\partial x_n \partial x_1}(x), \cdots, &amp;\frac{\partial^2 f}{\partial x_n^2}(x)
+\end{bmatrix}.
+$$
+Notice that the Hessian matrix is always symmetric. This is particularly convenient, as it means that the Hessian is diagonalizable and its eigenvectors can be chosen to be orthonormal.</p>
+<p><strong>Another Aside:</strong> Remember that a <u>symmetric</u> matrix $M$ is called positive-definite if for all vectors $x\in \R^n \backslash {0}$, we have $x^TMx &gt; 0$. Similarly, $M$ is positive-semidefinite if $x^TMx \geqslant 0$.</p>
+<p>Alternatively, we could say that $M$ is positive-definite iff all its eigenvalues are positive and it is positive-semidefinite iff all its eigenvalues are non-negative. It is often useful to think of definiteness like this, in terms of eigenvalues.</p>
+<p>Now let&rsquo;s revisit the second order optimality conditions. A stationary point can be a (local) minimizer only if the Hessian at that point is positive-semidefinite (necessary condition). However, if the Hessian is positive-definite, we can be certain that the point is a minimizer (sufficient condition).</p>
+<h3 id="finding-derivatives">Finding Derivatives<a hidden class="anchor" aria-hidden="true" href="#finding-derivatives">#</a></h3>
+<p>Many of the methods that we will discuss rely on derivatives (and sometimes Hessians). Therefore, it is nice to understand how we might provide derivatives to solvers before discussing the methods themselves. When the objective and the constraints are simple, we can of course compute their derivatives by hand and write code that explicitly computes gradients at each point. But often, this is not possible and we have to calculate (or approximate) derivatives automatically. There are several methods to do this:</p>
+<ol>
+<li><strong>Automatic Differentiation:</strong> These methods break down the code that <em>evaluates</em> $f$ into elementary arithmetic operations and compute the derivatives using chain rule. Think of modern deep learning frameworks such as PyTorch, TensroFlow, JAX.</li>
+<li><strong>Symbolic Differentiation:</strong> These methods can be thought of as an extension to the differentiate-by-hand method. They manipulate the algebraic expression of $f$ (when available) and compute the derivative. Think of symbolic packages of MAPLE, MATLAB, MATHEMATICA.</li>
+<li><strong>Finite Differences:</strong> When we expect $f$ to be smooth and without much noise, finite differences methods can be used to approximate the gradients. When we don&rsquo;t have an nicely formed expression for evaluating $f$, but nevertheless can evaluate it efficiently (e.g., evaluation may involve running a simulation) we can use these methods.</li>
+</ol>
+<h2 id="unconstrained-optimization">Unconstrained Optimization<a hidden class="anchor" aria-hidden="true" href="#unconstrained-optimization">#</a></h2>
+<h3 id="generic-method">Generic Method<a hidden class="anchor" aria-hidden="true" href="#generic-method">#</a></h3>
+<p>Consider the problem of minimizing a function $f$ over the $\R^n$. In derivative-based methods that are discussed below, we assume $f\in \mathcal{C}^1(\R^n)$ or $f\in \mathcal{C}^2(\R^n)$.</p>
+<p>Consider the very generic iterative method below:</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">Generic Method(GM):
+    Start with an initial guess $x_0$.
+    while Termination criteria not reached:
+        Compute a change vector $v$ based on the previous guess and the data
+        $x_{k+1} = x_k + v$
+        $k = k+1$
+</code></pre><p>Now by filling in the gaps we can get different algorithms.</p>
+<ol>
+<li><strong>Termination Criteria:</strong> The most often used stopping condition is to check if the gradient has become too small, i.e., $||\nabla f(x_k)||&lt;\epsilon$ along with the decreasing property, i.e., $f(x_{k+1}) &lt; f(x_k)$. But we can also use some more complicated eigenvalue-based criteria as well. In most cases though, we just check the norm of the gradient.</li>
+<li><strong>Computing The Change Vector:</strong> This is where the most variation in algorithms can be seen. How are we to find a vector $v$  following which allows us to further minimize the value of $f$? There are different approaches to finding this vector (line-search, trust region) that will be discussed below. But, at the heart of all these methods is a simple idea: we can use a simple, local model $m_k$ to approximate $f$ around $x_k$, and then try to minimize $m_k$. When we have access to derivatives, we can choose $m_k$ to be a <em>linear</em> or <em>quadratic</em> function based on the Taylor expansion of $f$. Of course this approximation will not work great if we move too far away from $x_k$, so we have to take that into consideration when computing $v$.</li>
+</ol>
+<p>Before presenting any concrete algorithms, it is useful to mention some desirable properties that we would like to have in an iterative algorithm. Ideally, we want to our algorithm to <strong>converge globally</strong>, meaning that the algorithm converges and terminates, regardless of the starting point (not to be confused with convergence to global minima!). If that is not possible, we would like to have some <strong>local convergence</strong> guarantee, meaning that the algorithm converges to a local minimizer or stationary point when we start sufficiently close to one. One final consideration is the <strong>speed of convergence</strong>. We would like to have algorithms that not only converge, but do so quickly!</p>
+<p>With these considerations in mind, we proceed to give the first algorithms for solving the optimization problem, based on the general recipe of the Generic Method.</p>
+<h3 id="line-search-methods">Line-search Methods<a hidden class="anchor" aria-hidden="true" href="#line-search-methods">#</a></h3>
+<p>Line-search methods work by first finding a descent direction $s_k\in\R^n$, and then computing a step size $\alpha_k&gt;0$ such that $f(x_k + \alpha_k s_k) &lt; f(x_k)$.</p>
+<p><strong>Descent Direction:</strong> A descent direction is a vector $s_k$ that if we take a sufficiently small step in its direction, will take us to a point where the value of $f$ is smaller. $-\nabla f(x_k)$ is one such direction that we can use. Generally speaking, any vector $s_k$ that satisfies $\nabla f(x_k)^T s_k &lt; 0$ is a descent direction (Think of directional derivatives!).</p>
+<p><strong>Step Size:</strong> Given a direction $s_k$, we now have to compute a step-size $\alpha_k&gt;0$ along $s_k$ such that
+$$
+f(x_k + \alpha_k s_k) &lt; f(x_k).
+$$
+Because $s_k$ is a descent direction, we know that a very small step size will satisfy the above inequality. But we also want the step size to be as large as possible, so that we converge faster. Fundamentally, line-search is a method for selecting an appropriate step size. So, we will first discuss the line-search methods for finding good step-sizes, and then talk about the choice of the descent direction (steepest descent is not always the best choice!).</p>
+<h4 id="exact-line-search">Exact Line-search<a hidden class="anchor" aria-hidden="true" href="#exact-line-search">#</a></h4>
+<p>Exact line-search finds the optimal step-size by solving an inner single-variable optimization
+$$
+\alpha_k = \arg \min_{\alpha&gt;0} f(x_k + \alpha s_k).
+$$
+This step size is optimal in the sense that $\alpha_k s_k$ is the most decreasing step we can take in the direction of $s_k$. Additionally, this is a single variable optimization (the only variable is $\alpha$) which is easier to solve than the full optimization that we had before. Unfortunately, repeatedly solving this inner optimization is computationally expensive for non-linear objectives.</p>
+<p><strong>An Aside:</strong> Conceptually, think of exact line-search as a method that shrinks the search space from $\R^n$ to a single line. What the full exact line-search does is finding a promising line in $\R^n$ and searching along it to find a better solution.</p>
+<h4 id="inexact-line-search">Inexact Line-search<a hidden class="anchor" aria-hidden="true" href="#inexact-line-search">#</a></h4>
+<p>Inexact line-search uses an step-size that may not be optimal, but is &ldquo;good enough&rdquo;, i.e., taking a step of that size will decrease $f$ by a &ldquo;sufficient amount&rdquo;, proportional to $\alpha_k$ and $\nabla f(x_k)^Ts_k$.</p>
+<p>One way of defining this sufficient amount is by using the Armijo condition. Let $\Phi_k (\alpha) := f(x_k + \alpha s_k)$. The Armijo condition requires that 
+$$
+\Phi_k(\alpha_k) \leqslant y_\beta(\alpha_k) := \Phi_k(0) + \beta\alpha_k\Phi&rsquo;(0),
+$$
+for some $\beta \in (0, 1)$.</p>
+<p>An algorithm that uses the Armijo condition will start with some large, initial step size $\alpha_k$, and backtracks (binary search style!) to find an $\alpha_k$ that satisfies the above condition. (<em>What should the initial step size be? Sometimes we just start with 1 agnostically, but there are some very interesting methods for &ldquo;guessing&rdquo; a good starting value!</em>)</p>
+<p><strong>Intuitively, what is the Armijo condition doing?</strong> Like the exact line-search, we are restricting $f$ to a line defined by the direction of $s_k$. This restricted version is $\Phi_k$. Exact line-search minimizes $\Phi_k$. However, here we are finding the line that is tangent to $\Phi_k$ at $0$, rotate it upwards by a small amount determined by $\beta$, and just find any point that is below this rotated line. The more we rotate the tangent, the easier it will be to find a point that lies below it, but also the more inaccurate (and suboptimal) the resulting step size may be.</p>
+<p>The figure below may be helpful to better understand this. Notice that $\Phi(\alpha)$ is the restricted version of $f$, $y_1(\alpha)$ is the tangent to it at zero, and $y_{0.6}(\alpha)$ is its the rotated version. Selecting any point at which $\Phi$ is below this line will result in a &ldquo;sufficiently good&rdquo; step size.</p>
+<img src=".\resources\armijo.jpg" style="zoom:50%;" />
+<h4 id="steepest-descent">Steepest Descent<a hidden class="anchor" aria-hidden="true" href="#steepest-descent">#</a></h4>
+<p>Choosing $s_k$ to be the negative gradient and using any line-search method will give an algorithm that is often called the <strong>method of steepest descent</strong>. Notice that the line-search, be it exact or with Armijo-like conditions, is key here, as it allows us to show some nice convergence properties. The next theorem, showcases this.</p>
+<p><strong>Theorem:</strong> Let $f$ be sufficiently smooth (i.e., $\nabla f$ is Lipschitz continuous) and bounded from below. The method of steepest descent globally converges, meaning that
+$$
+||\nabla f(x_k)|| \to 0 ;; \mathrm{as} ;; k \to \infty.
+$$
+Although steepest descent (SD) converges, it does so slowly. This is because SD is scale-dependent. Look at the Contour plots below and the evolution of the SD solution. In the first plot, SD (exact line-search) is able to find the minimizer in one step. However, if the problem becomes slightly ill-conditioned, as is in the second plot, it will take much longer for SD to converge.</p>
+<p><img src="./resources/sd1.png" style="zoom:20%;" /><img src="./resources/sd2.png" style="zoom:20%;" /></p>
+<p><strong>An Aside:</strong> SD converges linearly and the condition number of the Hessian matrix determines the rate of convergence for SD. This highlights the issue with SD: because it doesn&rsquo;t take the curvature (Hessian) into account, it may perform poorly. As can be seen in the plots above, taking the direction of steepest descent is not always the best choice.</p>
+<h4 id="beyond-steepest-descent">Beyond Steepest Descent<a hidden class="anchor" aria-hidden="true" href="#beyond-steepest-descent">#</a></h4>
+<p>As we saw, SD with line-search can have very slow convergence rates. The simplest way for dealing with the ill-conditioning that was mentioned is to simply scale our variables (batch normalization in neural nets claims to be doing this!). Second order methods, headlined by the famous Newton&rsquo;s method, use the Hessian (or an approximation of it) to automatically address this issue. In this section, general ideas behind these methods are presented without going into much details about the specificities of the algorithms.</p>
+<h5 id="newtons-method">Newton&rsquo;s Method<a hidden class="anchor" aria-hidden="true" href="#newtons-method">#</a></h5>
+<p>Let&rsquo;s revisit how we ended up with $-\nabla f(x_k)$ as the descent direction. In essence, we approximated $f$ near $x_k$ with a linear model. Using the Taylor expansion, this linear model was 
+$$
+m_k(s) = f(x_k) + \nabla f(x_k)^T s.
+$$
+Now, if we want to minimize this function (subject to $||s|| = ||\nabla f(x_k)||$ to bound the values from below), we should let $s=-\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.</p>
+<p>The idea behind Newton&rsquo;s method is to use a second order approximation to $f$. Suppose $B_k$ is a symmetric positive-definite matrix and that we choose to locally approximate $f$ by
+$$
+m_k(s) = f(x_k) + \nabla f(x_k)^T s +\frac{1}{2}s^TB_ks.
+$$
+Because $B_k$ is positive-definite, this quadratic function has a unique minimum that can be found by:
+$$
+\nabla_s m_k(s^<em>) = 0 \implies -\nabla f(x_k) = B_ks^</em>.
+$$
+So, to find the direction of descent we must solve this system of linear equations for $s^*$.</p>
+<p>One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^*$ is a descent direction:
+$$
+s^T\nabla f(x_k) &lt; 0 \implies -s^TB_ks &lt; 0 \implies s^TB_ks &gt;0.
+$$
+If $\nabla^2 f(x_k)$ is positive-definite, we can let $B_k = \nabla^2 f(x_k)$ as this would result in the best quadratic approximation of $f$ (Taylor expansion). This choice gives raise to an algorithm known as the <em>damped Newton method</em>.</p>
+<p>However, the Hessian need not be positive-definite, it may be that its positive-semidefinite. So this choice of $B_k$ requires $f$ to be locally strictly convex everywhere! Even if this is the case, we still need a number of additional assumptions to prove global convergence. To summarize, Newton&rsquo;s method</p>
+<ul>
+<li>is scale-invariant (solves the issue with steepest descent),</li>
+<li>can speed up convergence (quadratic convergence) for functions with positive-definite Hessians,</li>
+<li>has no global convergence guarantees, even worse, it may not converge at all for some simple examples.</li>
+</ul>
+<h5 id="modified-newton-method">Modified Newton Method<a hidden class="anchor" aria-hidden="true" href="#modified-newton-method">#</a></h5>
+<p>When the Hessian is not positive-definite, we can &ldquo;perturb&rdquo; it a little so that it becomes sufficiently positive definite. In modified Newton method the descent direction is found by solving a slightly different system of linear equaitons:
+$$
+(\nabla^2 f(x_k) + M_k)s_k = -\nabla f(x_k),
+$$
+where $M_k$ is chosen such that $\nabla^2 f(x_k) + M_k$ is &ldquo;sufficiently&rdquo; positive-definite. Here, we will not get into the details of computing $M_k$.</p>
+<p>This allows Newton&rsquo;s method to be used with general objectives that don&rsquo;t necessarily have positive-definite Hessians. However, we still need some additional assumptions to guarantee their global convergence.</p>
+<h5 id="quasi-newton-methods">Quasi-Newton Methods<a hidden class="anchor" aria-hidden="true" href="#quasi-newton-methods">#</a></h5>
+<p>When we don&rsquo;t have access to second order derivatives, we can use a class of methods called quasi-Newton methods, to compute an approximation of the Hessian, $B_k \approx \nabla^2 f(x_k)$. A very general description of these methods is as follows: we start by an initial guess, $B_0$. After computing $s_k$ by solving $B_ks_k = -\nabla f(x_k)$ and setting $x_{k+1} = x_k + \alpha_ks_k$, we compute a (cheap) update $B_{k+1}$ of $B_k$.</p>
+<p>Again, we don&rsquo;t go into the details of how $B_k$ is updated. There are several methods that use this idea. BFGS and DFP are two of the most important ones that are considered to be state-of-the-art for unconstrained optimization.</p>
+<p>Quasi-Newton methods are faster than Newton&rsquo;s method, they require $\mathcal{O}(n^2)$ calculations per iteration as opposed to the $\mathcal{O}(n^3)$ required by Newton&rsquo;s method. They also converge faster (in fewer iterations) compared to steepest descent methods, as they leverage curvature information.</p>
+<h4 id="line-search-wrap-up">Line-search Wrap-up<a hidden class="anchor" aria-hidden="true" href="#line-search-wrap-up">#</a></h4>
+<p>In this final section, let&rsquo;s put all the things that we saw about line-search together so that we can have a clear idea of what line-search methods are doing.</p>
+<p>At the $k$-th step, line-search methods locally approximate the non-convex objective function $f$ with a simple model $m_k$. This model can be linear, in which case it has the form $m_k(s) = f(x_k) + \nabla f(x_k)^Ts$ or quadratic, in which case it has the form $m_k(s) = f(x_k) + \nabla f(x_k)^Ts + \frac{1}{2}s^TB_k s$. When we have access to the Hessian, we can use $B_k = \nabla^2 f(x_k)$, otherwise, we can use estimates of the Hessian.</p>
+<p>Once we have this model $m_k$, we use it to find a descent direction, $s_k$. This direction is found by minimizing the model, $m_k$. In the case of a linear model, this direction is $-\nabla f(x_k)$ and in the case of the quadratic model it is the solution to $B_ks_k = -\nabla f(x_k)$. Notice two important points:</p>
+<ul>
+<li>When we use a linear model, $m_k$ is not bounded from below. Therefore, we can&rsquo;t minimize it. To address this issue, we actually solve the constrained optimization $\min_{s}m_k(s)$ subject to $||s||&lt;\nabla f(x_k)$.</li>
+<li>When we use a quadratic model, $m_k$ is not bounded from below unless it is a convex, which is the case if and only if $B_k$ is positive-definite. So, when $B_k$ is not positive-definite, we perturb it. In essence, we locally approximate $f$ with a convex quadratic, even if $f$ is not locally convex. This means that our model may no longer be the most accurate local approximation.</li>
+</ul>
+<p>Finally, when we have a descent direction we need to find a suitable step size $\alpha_k$ so that taking a step of this size in the descent direction results in a &ldquo;sufficient decrease&rdquo; in the value of $f$. To find this step size we use either exact line search or Armijo-like conditions.</p>
+<p>This wraps-up our discussion of line-search methods.</p>
+<h3 id="trust-region-methods">Trust-region Methods<a hidden class="anchor" aria-hidden="true" href="#trust-region-methods">#</a></h3>
+<p>The basic idea behind line-search methods is &ldquo;I know which direction I want to go, find me the largest step I can take in that direction to ensure sufficient progress in minimizing $f$&rdquo;. Trust-region methods take the opposite approach; their methodology is &ldquo;I know the maximum step size I want to take, find me the best direction to follow&rdquo;. This nicely illustrates the main idea behind trust-region methods as well as its differences compared to line-search methods.</p>
+<p>Let&rsquo;s begin our discussion of trust-region methods (TR). Similar to line-search, we begin by approximating $f(x_k + s)$ by a quadratic model
+$$
+m_k(s) = f(x_k) + \nabla f(x_k)^T s + \frac{1}{2} s^T B_k s,
+$$
+where $B_k$ is some symmetric (but not necessarily positive-definite) approximation of $\nabla^2 f(x_k)$. This model has two possible issues:</p>
+<ol>
+<li>It may not resemble $f(x_k +s)$ for large values of $s$,</li>
+<li>It may be unbounded from below: if $m_k$ is not convex, it will be unbounded and we can&rsquo;t meaningfully talk about minimize it.</li>
+</ol>
+<p>Trust-region methods prevent bad approximations by &ldquo;trusting&rdquo; the model only in a <em>trust region</em>, defined by the trust-region constraint
+$$
+||s|| \leqslant \Delta_k
+$$
+for some appropriate radius $\Delta_k$.</p>
+<p>This constraint also addresses the second issue by not allowing the model to be unbounded.</p>
+<p><strong>The Trust-region Subproblem:</strong> We refer to the minimization of the model subject to the trust region constraint as the trust-region subproblem:
+$$
+\min_{s\in \R^n} m_k(s) ;;\mathrm{subject;to} ;; ||s|| \leqslant \Delta_k
+$$
+Notice that here, unlike in line-search, the model may be non-convex.</p>
+<p><strong>Solving The Trust-region Subproblem:</strong></p>
+<p>There are various efficient ways for computing (or approximating) the solution of this constrained optimization problem. Here, we just briefly mention a few popular strategies:</p>
+<ul>
+<li>We can solve this problem <em>exactly</em>, and find the global minimizer. This would result in a Newton-like trust-region method.</li>
+<li>In large-scale problems, we can solve it <em>approximately</em>, using iterative methods such as conjugate-gradient or Lancsoz method.</li>
+</ul>
+<p>Now, let&rsquo;s assume that we have the solution $s_k$ to the trust-region subproblem. How should we use it to take an optimization step?</p>
+<p>The <em>predicted model decrease</em> from taking the step $s_k$ is
+$$
+m_k(0) - m_k(s_k) = f(x_k) - m_k(s_k).
+$$
+The <em>actual function decrease</em> is 
+$$
+f(x_k) - f(x_k + s_k).
+$$
+Consider the ratio of these two
+$$
+\rho_k := \frac{f(x_k) - f(x_k + s_k)}{f(x_k) - m_k(s_k)}.
+$$
+If in the current trust-region $m_k$ is a good model for $f$, we expect $\rho_k$ to be close to $1$. If $\rho_k$ is much smaller than $1$, it means that our trust region is too large and the model can not accurately approximate $f$ in this region. This means that we have to decrease the radius of the trust region. So, the trust region radius $\Delta_k$ will be updated based on $\rho_k$:</p>
+<ul>
+<li>If $\rho_k$ is not too smaller than $1$, take an optimization step $x_{k+1} = x_{k} + s_k$ and increase the trust region radius, $\Delta_{k+1} \geqslant \Delta_k$.</li>
+<li>If $\rho_k$ is much smaller than $1$, shrink the trust region without taking any steps: $x_{k+1} = x_{k}$, $\Delta_{k+1} &lt; \Delta_k$.</li>
+</ul>
+<p>(One simple way to shrink or expand $\Delta_k$ is by multiplying or dividing by $2$)</p>
+<p><strong>What about convergence?</strong> Under similar assumptions to those of the steepest descent, this general recipe for trust-region optimization converges globally! But note that unlike steepest descent, we can use a wide variety of methods for computing the descent direction: we can use Newton or Quasi-Newton methods, approximate methods, etc.</p>
+<p>This section ends by mentioning some remarks about line-search and trust-region methods.</p>
+<ul>
+<li>Quasi-Newton methods and approximate derivatives can be used within the trust-region framework (Note that we don&rsquo;t need positive-definite updates for the Hessian)</li>
+<li>There are state-of-the-art implementations of both line-search and trust-region methods. Generally, they have similar performances and choosing between the two is now mostly a matter of taste.</li>
+</ul>
+<h2 id="constrained-optimization">Constrained Optimization<a hidden class="anchor" aria-hidden="true" href="#constrained-optimization">#</a></h2>
+<h3 id="preliminaries">Preliminaries<a hidden class="anchor" aria-hidden="true" href="#preliminaries">#</a></h3>
+<p>In this chapter we move on to study constrained optimization problems. Again, we have an objective function $f: \R^n \to \R$  that we want to minimize. But now, we have a set of equality and inequality constraints that our solution must satisfy. These constraints are smooth, but can be very complicated functions. Furthermore, although each of them is smooth, their union may specify a feasible region with a lot of &ldquo;rough edges&rdquo;. Consider linear programming for instance: there all of the constraints are linear, but the feasible region can be a polygon with many sides and sharp corners. In fact, this is precisely what makes linear programming hard.</p>
+<p>Mathematically, a constrained optimization problem is formulated as
+$$
+\min_{x\in \R^n} f(x) ;; \mathrm{subject; to} \
+c_E(x) = 0, \
+c_I(x) \geqslant 0,
+$$
+where $f: \R^n \to \R$ is a smooth objective function and $E, I$ are index sets. By $c_I(x) \geqslant 0$ we mean $c_i(x) \geqslant 0$ for all $i\in I$, and similarly for $c_E$. All  of the constraints $c_i$ are smooth functions.</p>
+<p>We refer to the set of points that satisfy the constraints as the feasible region, denoted by $\Omega$:
+$$
+\Omega = {x\in \R^n: c_E(x) = 0, ; c_I(x) \geqslant 0}
+$$</p>
+<h4 id="characterizing-solutions">Characterizing Solutions<a hidden class="anchor" aria-hidden="true" href="#characterizing-solutions">#</a></h4>
+<p>As we saw in the first chapter, solutions to an unconstrained optimization problem could be characterized in terms of derivatives. In particular, we saw that any minimizer has to be an stationary point for $f$. This is not necessarily the case in constrained optimization. A minimizer may be a boundary point (located on the boundary of the feasible regions) in which case it doesn&rsquo;t have to be an stationary point of $f$. The plot below shows an example of this where the global minimizer of the blue function within the region defined by the red lines is a boundary point with non-zero derivative.</p>
+<img src="./resources/optima.png" style="zoom:50%;" />
+<p>The analogue of stationarity in constrained problems is the Karush-Kuhn-Tucker (KKT) conditions. KKT condition helps us characterize solutions in terms of derivatives.
+$$
+\mathrm{unconstrained ; problems} \longrightarrow \hat{x};\mathrm{is ; stationary ; point}; (\nabla f(\hat{x}) = 0) \
+\mathrm{constrained ; problems} \longrightarrow \hat{x};\mathrm{is ; KKT ; point}
+$$
+To introduce the KKT conditions, we first need to define the Lagrangian function of a constrained optimization problem.</p>
+<p>The <strong>Lagrangian function</strong> of a constrained optimization problem is defined as
+$$
+\mathcal{L}(x, y, \lambda) := f(x) - \sum_{j\in E} {y_j c_j (x)} - \sum_{i\in I} {\lambda_i c_i(x)}.
+$$
+The values $y, \lambda$ are known as <em>Lagrange multipliers</em>. The Lagrangian compresses the objective and the constraints of a problem into a single expression.</p>
+<p>A point $\hat x$ is a KKT point of a constrained problem if multipliers $(\hat y, \hat \lambda)$ exist such that</p>
+<ol>
+<li>$\hat x$ is an stationary point of the Lagrangian <em>for these multipliers</em>, i.e., $\nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = 0$,</li>
+<li>the multipliers for inequalities are non-negative, i.e., $\hat \lambda \geqslant 0$,</li>
+<li>only active constraints matter at $\hat x$, i.e., for all $i\in I$, $\hat \lambda_i c_i (\hat x) = 0$,</li>
+<li>$\hat x$ is feasible, i.e., $c_E(\hat x) = 0$, $c_I(\hat x) \geqslant 0$.</li>
+</ol>
+<p>Condition 3 may be a bit strange, so let&rsquo;s focus on that a little. It asserts that $\hat\lambda_i c_i(\hat x)$ must be zero for all inequality constraints. This means that either $c_i(\hat x) = 0$ or otherwise, $\hat\lambda_i = 0$. If $c_i(\hat x) = 0$, it means that $\hat x$ is on the boundary of the region defined by the $i$-th inequality constraint. When this is the case, we call the $i$-th constraint &ldquo;active&rdquo;. Therefore, the multipliers must be zero for any inactive condition. This makes sense, because if a condition is inactive, it means that $\hat x$ is in the interior of the region determined by that condition (either on the feasible side or on the infeasible side). If this is the case, we are not concerned with that condition, because it is &ldquo;far away&rdquo; from us.</p>
+<p>To further illustrate this, look at the example plotted in the beginning of this section. There we have two inequality constraints: $x- 2\geqslant 0$, $9-x \geqslant 0$. When we want to investigate the optimality of $\hat x = 2$ the first condition is active, as we are on the boundary of the region defined by this constraint. The second condition, in contrast, is inactive, as we are away from it&rsquo;s boundary. To investigate the optimality of $\hat x$, it doesn&rsquo;t matter if the second condition is $9-x\geqslant0$ or $1000 - x \geqslant 0$. So effectively, we don&rsquo;t have to consider this condition. Therefore, the third condition requires the multiplier corresponding to this constraint to be zero, i.e., this condition is not included in the Lagrangian.</p>
+<p>Also, note that the condition 4 ensures that we are on the &ldquo;correct side&rdquo; of inactive conditions.</p>
+<p>With these in mind, let&rsquo;s take a closer look at condition 1. The gradient of the Lagrangian with respect to $x$ is
+$$
+\nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = \nabla f(x) - \sum_{j\in E} {y_j \nabla c_j (x)} - \sum_{i\in I} {\lambda_i \nabla c_i(x)}.
+$$
+If we take it to be zero, we get
+$$
+\nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = 0 \ \implies \nabla f(x) = \sum_{j\in E} {y_j \nabla c_j (x)} + \sum_{i\in I} {\lambda_i \nabla c_i(x)}.
+$$
+In words, condition 1 is maintaining that at a KKT point, the <strong>gradient of the objective must be a linear combination of the gradients of (active) constraints</strong>.</p>
+<p><strong>A Caveat:</strong> In general, not every KKT point is an optimal point for the constrained optimization problem. We also need the constraints to satisfy some regularity assumptions known as <em>constraint qualifications</em> in order to derive necessary optimality conditions (for instance, the feasible region defined by the constraints must have an interior). A good news is that if the constraints are linear (as is the case for linear and quadratic programming), no constraint qualification is required.</p>
+<p><strong>Theorem [First order necessary conditions]:</strong> Under suitable constraint qualification, any local minimizer of a constrained optimization problem, is a KKT point.</p>
+<h3 id="methods">Methods<a hidden class="anchor" aria-hidden="true" href="#methods">#</a></h3>
+<h4 id="quadratic-penalty-equality-constraints">Quadratic Penalty (Equality Constraints)<a hidden class="anchor" aria-hidden="true" href="#quadratic-penalty-equality-constraints">#</a></h4>
+<p>Let&rsquo;s focus our attention on optimization problems that only have equality constraints. We can formulate these problems as
+$$
+\min_{x\in\R^n} f(x) ;;\mathrm{subject;to} ;; c(x) = 0,
+$$
+where $f:\R^n\to\R$ and $c:\R^n\to\R^m$ are smooth functions.</p>
+<p>One idea for solving such problems is to <em>form a single, parametrized and unconstrained objective, whose minimizers approach the solutions to the initial problem as the parameter value varies</em>.</p>
+<p>The <strong>quadratic penalty function</strong> is one such function. It is defined as
+$$
+\Phi_\sigma (x) := f(x) + \frac{1}{2\sigma}||c(x)||^2,
+$$
+where $\sigma &gt; 0$ is the penalty parameter. Now instead of solving the original problem, we solve the unconstrained minimization of $\Phi_\sigma$.</p>
+<p>Notice that a minimizer of $\Phi_\sigma$ does not necessarily satisfy the constraint. But, as we let $\sigma \to 0$, we penalize infeasible points more and more, and force  the solution to satisfy the constraint.</p>
+<p>We could use any method for solving the unconstrained optimization of $\Phi_\sigma$ (line-search, trust-region, etc.).</p>
+<p><strong>Some consideration:</strong></p>
+<ul>
+<li>
+<p>We typically use simple schedules like $\sigma_{k+1} = 0.1\sigma_k$ or $\sigma_{k+1} = \sigma_k^2$ to decrease $\sigma$.</p>
+</li>
+<li>
+<p>Say we optimized $\Phi_{\sigma_k}$ and found a minimizer $x_k$. When we decrease the value of $\sigma_k$ and want to minimize $\Phi_{\sigma_{k+1}}$, we start the optimization from $x_k$. This kind of &ldquo;warm starting&rdquo; helps a lot in practice.</p>
+</li>
+<li>
+<p>As $\sigma$ approaches zero, $\Phi_\sigma$ becomes very steep in the direction of the constraint&rsquo;s gradients (See the figure below). As a result, the optimization of $\Phi_\sigma$ becomes ill-conditioned. This is something that we have to keep in mind when minimizing $\Phi_\sigma$. For instance, first order methods will probably not work well. Additionally, when we want to use trust-region methods, it&rsquo;s best if we scale the trust region to account for the ill-conditioning of the problem.</p>
+<img src="./resources/penalty_fn.jpg" style="zoom:50%;" />
+</li>
+<li>
+<p>Other effective ways of combating the ill-conditioning is to use <em>change of variables</em> or <em>primal-dual variants</em>, where we compute explicit changes in both $x$ and constraint multipliers $\lambda$.</p>
+</li>
+</ul>
+<p>Putting these ideas together, the quadratic penalty method has the following structure.</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">Quadratic Penalty Method(QP):
+    Start with an initial value of $\sigma_0&gt;0$
+    k = 0
+    while not converged:
+    	Choose $0 &lt; \sigma_{k+1} &lt; \sigma_k$
+    	Starting from $x_k^{(0)}$ (Possibly $x_k^{(0)} = x_{k}$), use an unconstrained minimization algorithm to find an approximate minimizer $x_{k+1}$ of $\Phi_{\sigma_{k+1}}
+    	
+        $k = k+1$
+</code></pre><h4 id="interior-point-inequality-constraints">Interior Point (Inequality Constraints)<a hidden class="anchor" aria-hidden="true" href="#interior-point-inequality-constraints">#</a></h4>
+<p>Now let&rsquo;s see how we can deal with inequality constraints. For the sake of simplicity, assume that we only have inequality constraints. So our problem can be written as
+$$
+\min_{x\in\R^n} f(x) ;;\mathrm{subject;to} ;; c(x) \geqslant 0,
+$$
+where $f:\R^n\to\R$ and $c:\R^n\to\R^m$ are smooth functions.</p>
+<p>Again, the idea is to turn this into an unconstrained optimization. <strong>Barrier function</strong> methods are one way of doing this. For $\mu &gt; 0$, the corresponding <strong>logarithmic barrier subproblem</strong> is defined as
+$$
+\min_{x\in \R^n} f_\mu := f(x) - \mu\sum_{i} \log c_i(x) \
+\mathrm{subject; to} ;; c(x) &gt; 0.
+$$
+Notice that in essence, this is an unconstrained optimization because the log barrier prevents the optimization algorithm to &ldquo;go over&rdquo; the constraint boundary. Let&rsquo;s focus on this a bit more. How does the log transformation help us stay inside the feasible region? Consider what happens at the boundaries of the constraints. If we get close to the boundaries of the $i$-th constraint, the $\log$ term approaches $-\infty$. Thus, the value of the barrier function gets very large. This means that if we are at a point $x$ inside the feasible region and take an optimizing, step we will stay inside the feasible region because the barrier function increases sharply as we get closer to the boundary, provided that the optimizing step is not so large that we go over the barrier entirely (which can be guaranteed by forcing our line-search or trust-region method to respect $c(x) &gt; 0$ when computing their step sizes). Therefore, we are guaranteed to stay inside the feasible region.</p>
+<p>But there is a drawback to this. First, note that the $\log$ terms also change the landscape inside the feasible region. So a solution to the logarithmic barrier subproblem is not necessarily a local minimizer of the original objective. Furthermore, the local minimizer of the original objective may be on the boundary! If this is the case, the logarithmic subproblem will never reach it.</p>
+<p>To solve these issues, we do something similar to what we did with the quadratic penalty function: We iteratively decrease $\mu$ and minimize $f_\mu$, warm-starting from the solution of the previous iteration.</p>
+<p>The basic barrier method is presented below.</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">Basic Barrier Method(B):
+    Start with an initial value of $\mu_0&gt;0$
+    k = 0
+    while not converged:
+    	Choose $0 &lt; \mu_{k+1} &lt; \mu_k$
+    	Starting from a point $x_k^{(0)}$ satisfying $c(x_k^{(0)}) &gt; 0$ (Possibly $x_k^{(0)} = x_{k}$), use an unconstrained optimization algorithm to find an approximate minimizer $x_{k+1}$ of $f_{\mu_{k+1}}. Ensure that the optimizer doesn&#39;t take large steps that will result in an infeasible point.
+    	
+        $k = k+1$
+</code></pre><p><strong>Some considerations:</strong></p>
+<ul>
+<li>Interior point methods require us to find at least one feasible point to get started. This may not always be trivial!</li>
+<li>Because the barrier function blows up near the boundaries, optimizing $f_\mu$ is again ill-conditioned. The problem here is much worse than in penalty methods (the barrier function literally goes to infinity!), so much that we have to use primal-dual methods.</li>
+<li>In implementations, it is essential to keep iterates away from the boundaries early in the iterations. Otherwise, we may get trapped near the boundary which makes convergence very slow.</li>
+</ul>
+<h2 id="derivative-free-optimization">Derivative-Free Optimization<a hidden class="anchor" aria-hidden="true" href="#derivative-free-optimization">#</a></h2>
+<p>Consider the (unconstrained) optimization problem of minimizing $f:\R^n \to \R$. Even when $f$ is smooth, we may want to use derivative-free methods to solve this problem. This may be because:</p>
+<ol>
+<li><strong>Exact first derivatives are unavailable:</strong> $f(x)$ may be given by a black box, propriety code or a simulation.</li>
+<li><strong>Computing $f(x)$ for any given $x$ is expensive:</strong> $f(x)$ may be given by a time-consuming numerical simulation or lab experiments.</li>
+<li><strong>Numerical approximation of $\nabla f(x)$ is expensive or slow:</strong>  Using finite-differencing for estimating the gradient may be too expensive.</li>
+<li><strong>The values of $f(x)$ are noisy:</strong> When evaluation of $f(x)$ is inaccurate. For example when $f(x)$ depends on discretization, sampling, inaccurate data, etc. Then the gradient information is meaningless.</li>
+</ol>
+<p>What are some actual examples of such situations? One common and important case is hyperparameter tuning (e.g., in machine learning). In hyperparameter tuning derivative calculation is often impossible and evaluations are costly. Some other examples are parameter estimation, automatic error analysis, engineering design, molecular geometry, etc.</p>
+<p>There are many derivative-free algorithms for optimization. Some examples are model-based methods, direct-search algorithms, pattern-search, Nelder-Mead and random search. These algorithms share some <strong>common characteristics</strong>:</p>
+<ul>
+<li>They only use objective function values to construct iterates.</li>
+<li>Do <u>not</u> compute an approximate gradient.</li>
+<li>Instead, they form a sample of points (less tightly clustered than in finite-differences) and use the associated function values to construct $x_{k+1}$. They also control the geometry of the sample sets.</li>
+<li>They try to approximate local solution with &ldquo;few&rdquo; function evaluations.</li>
+<li>Asymptotic speed is irrelevant as they don&rsquo;t have any optimality condition for termination.</li>
+<li>They are suitable for non-smooth and global optimization.</li>
+</ul>
+<p>There are also some <strong>limitations</strong> to these methods:</p>
+<ul>
+<li>They work best when the problem is small in scale (order of $10^2$ variables).</li>
+<li>The objective function $f$ must be quite smooth.</li>
+</ul>
+<h3 id="model-based-trust-region-derivative-free-optimization">Model-Based Trust-Region Derivative-Free Optimization<a hidden class="anchor" aria-hidden="true" href="#model-based-trust-region-derivative-free-optimization">#</a></h3>
+<p>To illustrate how derivative-free methods work, we briefly discuss a model-based method. They underlaying idea is similar to what we did in derivative-based unconstrained optimization. Essentially, we want to create models of $f$ that are not based on the gradient. This means that we can&rsquo;t use Taylor models. So how are we to create such models? The idea is to create a model by interpolating $f$ on a set of appropriately chosen sample points.</p>
+<p>Assume we have a sample set $Y = {y_1, \cdots, y_q}$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$.</p>
+<p>Our model $m_k(s)$ is again a simple linear or quadratic function of the following form
+$$
+m_k(s) = c + s^Tg ;;(+\frac{1}{2}s^THs),
+$$
+where $c\in\R$, $g\in \R^n$ (, $H \in \R^{n\times n}$) are unknowns. To find these unknowns, <u>we don&rsquo;t use gradients or Hessians</u>! Instead, we compute them to satisfy the interpolation conditions for the set of sampled points:
+$$
+\forall y \in Y ;; m_k(y - x_k) = f(y).
+$$
+We need $q=n+1$ sample points to find the parameters of a linear model (i.e., $H=0$) and $q = \frac{(n+1)(n+2)}{2}$ points for a quadratic model.</p>
+<p>Once we have a model, we use it just like in the derivative-based trust-region method, i.e., (because $m_k$ is non-convex) we add a trust-region constraint and solve
+$$
+s_k = \arg \min_{s\in \R^n} m_k(s) ;; \mathrm{subject ; to} ;; ||s|| \leqslant \Delta_k.
+$$
+We use $\rho_k$ to measure progress and proceed exactly like in the derivative-based method.</p>
+<p>Because recomputing $m_k$ requires many new function evaluations, we instead <em>update</em> it by removing one point from the sample set, $Y$, and replacing it with a new point.</p>
+<p>This is a rough sketch for a model-based, trust-region, derivative-free algorithm. But note that a complete algorithm is much more involved, we must</p>
+<ul>
+<li>make sure that the system of linear equations used for finding model parameters is non-singular,</li>
+<li>monitor the geometry of $Y$ to help with conditioning,</li>
+<li>have suitable strategies for adding and removing points from $Y$,</li>
+<li>&hellip;</li>
+</ul>
+<p><strong>An Aside:</strong> One thing to note here is that <u>we are not limited to linear and quadratic models</u>. As long as we can minimize the model with the trust-region method, we are good to go! So based on the geometry of $f$, if we think that say, a sinusoidal function can better locally approximate it, we can use it as our model. Or if the number of variables, $n$, is too large, we may constrain $H$ to be a rank $1$ matrix or $g$ to be a sparse vector, thus reducing the number of parameters of the model.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://conflictednerd.github.io/blog/hello-world/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Hello World</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on twitter"
+        href="https://twitter.com/intent/tweet/?text=&amp;url=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f&amp;hashtags=">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on linkedin"
+        href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f&amp;title=&amp;summary=&amp;source=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on reddit"
+        href="https://reddit.com/submit?url=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f&title=">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on facebook"
+        href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on whatsapp"
+        href="https://api.whatsapp.com/send?text=%20-%20https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share  on telegram"
+        href="https://telegram.me/share/url?text=&amp;url=https%3a%2f%2fconflictednerd.github.io%2fblog%2fintroduction-to-optimization%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://conflictednerd.github.io/">Conflicting Ideas</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

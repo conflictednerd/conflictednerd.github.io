@@ -6,22 +6,49 @@
     <description>Recent content in Tags on Conflicting Ideas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Jul 2022 20:22:16 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 27 Aug 2022 01:54:49 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>information theory</title>
-      <link>https://conflictednerd.github.io/tags/information-theory/</link>
-      <pubDate>Mon, 25 Jul 2022 20:22:16 +0430</pubDate>
+      <title>long read</title>
+      <link>https://conflictednerd.github.io/tags/long-read/</link>
+      <pubDate>Sat, 27 Aug 2022 01:54:49 +0430</pubDate>
       
-      <guid>https://conflictednerd.github.io/tags/information-theory/</guid>
+      <guid>https://conflictednerd.github.io/tags/long-read/</guid>
       <description></description>
     </item>
     
     <item>
       <title>notes</title>
       <link>https://conflictednerd.github.io/tags/notes/</link>
-      <pubDate>Mon, 25 Jul 2022 20:22:16 +0430</pubDate>
+      <pubDate>Sat, 27 Aug 2022 01:54:49 +0430</pubDate>
       
       <guid>https://conflictednerd.github.io/tags/notes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>numerical analysis</title>
+      <link>https://conflictednerd.github.io/tags/numerical-analysis/</link>
+      <pubDate>Sat, 27 Aug 2022 01:54:49 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/numerical-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>optimization</title>
+      <link>https://conflictednerd.github.io/tags/optimization/</link>
+      <pubDate>Sat, 27 Aug 2022 01:54:49 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/optimization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>information theory</title>
+      <link>https://conflictednerd.github.io/tags/information-theory/</link>
+      <pubDate>Mon, 25 Jul 2022 20:22:16 +0430</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/information-theory/</guid>
       <description></description>
     </item>
     
