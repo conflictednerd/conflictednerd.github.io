@@ -61,17 +61,6 @@
       <description>The very first post in my website!</description>
     </item>
     
-    <item>
-      <title></title>
-      <link>https://conflictednerd.github.io/blog/introduction-to-optimization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://conflictednerd.github.io/blog/introduction-to-optimization/</guid>
-      <description>Optimization: An Introduction (Based on a lecture by professor Coralia Cartis, university of Oxford)
-This short note is mainly about optimization problems; more specifically, non-convex optimization problems. Generally, different approaches to solving these problems can be put into three main categories:
-Those that use derivatives, be it first order (gradient descent) or higher order (Newton&amp;rsquo;s method), Those that don&amp;rsquo;t use derivatives, regarded as derivative-free methods (evolutionary methods), Inexact and probabilistic methods.</description>
-    </item>
-    
     
     
   </channel>
