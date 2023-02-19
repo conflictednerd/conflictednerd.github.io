@@ -6,7 +6,16 @@
     <description>Recent content in programming on Conflicting Ideas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Jul 2022 22:29:29 +0430</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Feb 2023 09:10:17 +0330</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>In Praise of Einsum</title>
+      <link>https://conflictednerd.github.io/blog/in-praise-of-einsum/</link>
+      <pubDate>Sun, 19 Feb 2023 09:10:17 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/blog/in-praise-of-einsum/</guid>
+      <description>A tutorial about einsum, Einstein summation notation.</description>
+    </item>
+    
     <item>
       <title>Setting Up Hugo with GitHub Pages</title>
       <link>https://conflictednerd.github.io/blog/setting-up-hugo-with-github-pages/</link>
