@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>variational inference on Conflicting Ideas</title>
+    <link>https://conflictednerd.github.io/tags/variational-inference/</link>
+    <description>Recent content in variational inference on Conflicting Ideas</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Mar 2023 01:19:15 +0330</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/variational-inference/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Variational Inference</title>
+      <link>https://conflictednerd.github.io/blog/variational-inference/</link>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/blog/variational-inference/</guid>
+      <description>A note on variational inference and VAEs</description>
+    </item>
+    
+  </channel>
+</rss>

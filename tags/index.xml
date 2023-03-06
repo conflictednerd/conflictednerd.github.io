@@ -6,13 +6,49 @@
     <description>Recent content in Tags on Conflicting Ideas</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Feb 2023 09:10:17 +0330</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 Mar 2023 01:19:15 +0330</lastBuildDate><atom:link href="https://conflictednerd.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>jax</title>
       <link>https://conflictednerd.github.io/tags/jax/</link>
-      <pubDate>Sun, 19 Feb 2023 09:10:17 +0330</pubDate>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
       
       <guid>https://conflictednerd.github.io/tags/jax/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>long read</title>
+      <link>https://conflictednerd.github.io/tags/long-read/</link>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/long-read/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>notes</title>
+      <link>https://conflictednerd.github.io/tags/notes/</link>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/notes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VAE</title>
+      <link>https://conflictednerd.github.io/tags/vae/</link>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/vae/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>variational inference</title>
+      <link>https://conflictednerd.github.io/tags/variational-inference/</link>
+      <pubDate>Tue, 07 Mar 2023 01:19:15 +0330</pubDate>
+      
+      <guid>https://conflictednerd.github.io/tags/variational-inference/</guid>
       <description></description>
     </item>
     
@@ -40,15 +76,6 @@
       <pubDate>Thu, 29 Sep 2022 12:47:40 +0330</pubDate>
       
       <guid>https://conflictednerd.github.io/tags/evolutionary-methods/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>notes</title>
-      <link>https://conflictednerd.github.io/tags/notes/</link>
-      <pubDate>Thu, 29 Sep 2022 12:47:40 +0330</pubDate>
-      
-      <guid>https://conflictednerd.github.io/tags/notes/</guid>
       <description></description>
     </item>
     
@@ -85,15 +112,6 @@
       <pubDate>Wed, 21 Sep 2022 14:52:46 +0430</pubDate>
       
       <guid>https://conflictednerd.github.io/tags/summary/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>long read</title>
-      <link>https://conflictednerd.github.io/tags/long-read/</link>
-      <pubDate>Sat, 27 Aug 2022 01:54:49 +0430</pubDate>
-      
-      <guid>https://conflictednerd.github.io/tags/long-read/</guid>
       <description></description>
     </item>
     
