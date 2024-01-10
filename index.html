@@ -126,14 +126,21 @@
         </ul>
     </nav>
 </header>
-<main class="main"><div class="profile">
-    <div class="profile_inner">
-        <img draggable="false" src="https://conflictednerd.github.io/profile.jpg" alt="profile photo" title="profile photo"
-            height="235" width="227" />
+<main class="main"> 
+<article class="first-entry home-info">
+    <header class="entry-header">
         <h1>A Collection of Conflicting Ideas</h1>
-        <span><p>Welcome to my blog 👋🏼</p>
-<p>I am Saeed Hedayatian. Currently, a computer science undergrad at Sharif University of Technology, Tehran. This blog is where I share intereting opinions, ideas, notes, etc. Mainly et cetera.</p>
-</span><div class="social-icons">
+    </header>
+    <div class="entry-content">
+        <p>Welcome to my blog 👋🏼.</p>
+<ul>
+<li>This is Saeed Hedayatian. I&rsquo;m a first year PhD student at University of Southern California. Currently, my main research focus is on multi-agent decision making + quality diversity optimization. More broadly, I&rsquo;m interested in the connection between ideas from QD optimization and decision-making, whether in RL, MARL, recommender systems, etc. I also like to explore how techniques from RL can help design more powerful QD algorithms.</li>
+<li>This blog is where I share intereting opinions, ideas, notes, etc. But mainly et cetera!</li>
+</ul>
+
+    </div>
+    <footer class="entry-footer">
+        <div class="social-icons">
     <a href="https://github.com/conflictednerd/" target="_blank" rel="noopener noreferrer me" title="Github">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
     stroke-linecap="round" stroke-linejoin="round">
@@ -174,35 +181,81 @@
     </a>
 </div>
 
-        <div class="buttons">
-            <a class="button" href="blog" rel="noopener" title="Blog">
-                <span class="button-inner">
-                    Blog
-                </span>
-            </a>
-            <a class="button" href="fragments" rel="noopener" title="Fragments">
-                <span class="button-inner">
-                    Fragments
-                </span>
-            </a>
-            <a class="button" href="categories" rel="noopener" title="Categories">
-                <span class="button-inner">
-                    Categories
-                </span>
-            </a>
-            <a class="button" href="archives" rel="noopener" title="Archives">
-                <span class="button-inner">
-                    Archives
-                </span>
-            </a>
-        </div>
-    </div>
-</div>
+    </footer>
+</article>
 
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Variational Inference
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Preliminaries It is usually the case that we have a dataset $\mathcal{D} = {x_1, \cdots, x_N}$ and a parametrized family of distributions $p_\theta (x)$. We would like to find the parameters that best describe the data. This is typically done using [[MLE and MAP|maximum likelihood estimation (MLE)]]. In this method, the optimal parameters are those that maximize the log likelihood of the data. Mathematically speaking, $$ \hat{\theta}_\mathrm{MLE} = \arg\max_\theta \frac{1}{N}\sum_{i=1}^{N}\log p_{\theta}(x_i)....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-03-07 01:19:15 +0330 +0330'>March 7, 2023</span>&nbsp;·&nbsp;14 min&nbsp;·&nbsp;Saeed Hedayatian</footer>
+  <a class="entry-link" aria-label="post link to Variational Inference" href="https://conflictednerd.github.io/blog/variational-inference/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>In Praise of Einsum
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This is a short note about the einsum functionality that is present in numpy, jax, etc. Understanding what it does is a bit tricky -naturally, because it can do the job of many other functions- but it is also very useful and can help a lot with linear algebraic computations. I will use numpy’s np.einsum() notation, but the underlaying concepts are the same regardless of syntactic differences in other libraries....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-02-19 09:10:17 +0330 +0330'>February 19, 2023</span>&nbsp;·&nbsp;8 min&nbsp;·&nbsp;Saeed Hedayatian</footer>
+  <a class="entry-link" aria-label="post link to In Praise of Einsum" href="https://conflictednerd.github.io/blog/in-praise-of-einsum/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>MAP-Elites
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>MAP-Elites is an elegant algorithm for solving general optimization problems. To be more accurate, it is an illumination algorithm that tries to find high-performing and diverse solutions in a search space. At its core, it is a simple algorithm, both conceptually and to implement. Here, I briefly introduce the main idea behind the algorithm and its components. I will also discuss its merits and demerits compared to other approaches. This note is based on Illuminating Search Spaces by Mapping Elites....</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-09-29 12:47:40 +0330 +0330'>September 29, 2022</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;Saeed Hedayatian</footer>
+  <a class="entry-link" aria-label="post link to MAP-Elites" href="https://conflictednerd.github.io/blog/map-elites/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Learning to Score Behaviors
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>(This is a note based on Learning to Score Behaviors for Guided Policy Optimization. I am trying to expand and clarify some of the algorithms that were presented there. More content will be added to this note in the future!)
+The core question:
+What is the right measure of similarity between two policies acting on the same underlaying MDP and how can we devise algorithms to leverage this information for RL?...</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-09-21 14:52:46 +0430 +0430'>September 21, 2022</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;Saeed Hedayatian</footer>
+  <a class="entry-link" aria-label="post link to Learning to Score Behaviors" href="https://conflictednerd.github.io/blog/learning-to-score-behaviors/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Optimization Primer
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>(Based on a lecture by professor Coralia Cartis, University of Oxford)
+(I don’t currently plan to extend it, but may expand and add more details to some of the later chapters in the future. I also like to eventually add some useful resources (books, talks, notes, etc.) about optimization)
+This brief note is about optimization problems. Though the main focus is on the general non-convex optimization problem, a lot of the methods borrow some ideas from convex optimization, so there are a lot of similarities....</p>
+  </div>
+  <footer class="entry-footer"><span title='2022-08-27 01:54:49 +0430 +0430'>August 27, 2022</span>&nbsp;·&nbsp;31 min&nbsp;·&nbsp;Saeed Hedayatian</footer>
+  <a class="entry-link" aria-label="post link to Optimization Primer" href="https://conflictednerd.github.io/blog/optimization-primer/"></a>
+</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="next" href="https://conflictednerd.github.io/page/2/">Next »</a>
+  </nav>
+</footer>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://conflictednerd.github.io/">Conflicting Ideas</a></span>
+    <span>&copy; 2024 <a href="https://conflictednerd.github.io/">Conflicting Ideas</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
