@@ -10,4 +10,5 @@ children:
   - title: divider
   - title: blog
     permalink: /blog/
+published: false
 ---
