@@ -57,7 +57,7 @@ $$
 The **Kullback-Leibler divergence** or **relative entropy** between two probability mass functions $p(x)$ and $q(x)$ is defined as
 
 $$
-D(p||q) = \mathbb{E}_{X\sim p(X)}\left[\log\frac{p(X)}{q(X)}\right] = \sum_{x\in \mathcal{X}} p(x)\log\frac{p(x)}{q(x)}.
+D(p\|\|q) = \mathbb{E}_{X\sim p(X)}\left[\log\frac{p(X)}{q(X)}\right] = \sum_{x\in \mathcal{X}} p(x)\log\frac{p(x)}{q(x)}.
 $$
 
 + In calculations, let $0\log {(\mathrm{whatever})} = 0$ and $p\log\frac{p}{0} = \infty$ for $p>0$.
@@ -66,12 +66,12 @@ $$
 
 + Another way of thinking about it is as *a measure of how similar samples of $p$ are to those of $q$*.
 
-+ If there is a symbol $x\in \mathcal{X}$ that may be seen when we sample from $p$, but will never appear when sampling from $q$ (i.e., $p(x)>0 = q(x)$), then the distance $D(p||q)$ is $\infty$. This is because there is a chance that, when sampling from $p$, we observe $x$, and immediately recognize that we are not sampling from $q$. Note however, that $D(q||p)$ may not be $\infty$, as not observing $x$ can not assure us that we are sampling form $p$.
++ If there is a symbol $x \in \mathcal{X}$ that may be seen when we sample from $p$, but will never appear when sampling from $q$ (i.e., $p(x)>0 = q(x)$), then the distance $D(p\|\|q)$ is $\infty$. This is because there is a chance that, when sampling from $p$, we observe $x$, and immediately recognize that we are not sampling from $q$. Note however, that $D(q\|\|p)$ may not be $\infty$, as not observing $x$ can not assure us that we are sampling form $p$.
 
 The **mutual information** $I(X; Y)$ between two random variables is the KL-divergence between their joint distribution, $p(x, y)$ and the product of their marginals, $p(x)p(y)$:
 
 $$
-I(X; Y) = D(p(x, y)||p(x)p(y)) = \sum_{x\in\mathcal{X}, y\in \mathcal{Y}} p(x, y)\log\frac{p(x, y)}{p(x)p(y)}.
+I(X; Y) = D(p(x, y)\|\|p(x)p(y)) = \sum_{x\in\mathcal{X}, y\in \mathcal{Y}} p(x, y)\log\frac{p(x, y)}{p(x)p(y)}.
 $$
 
 + Mutual information is symmetric, i.e., $I(X;Y) = I(Y;X).$
@@ -114,7 +114,7 @@ $$
 The **conditional KL-divergence** between the conditional distributions $p(y|x)$ and $q(y|x)$ is defined to be
 
 $$
-D(p(y|x)||q(y|x)) = \mathbb{E}_{X, Y\sim p(x, y)}\left[\log\frac{p(Y|X)}{q(Y|X)}\right].
+D(p(y|x)\|\|q(y|x)) = \mathbb{E}_{X, Y\sim p(x, y)}\left[\log\frac{p(Y|X)}{q(Y|X)}\right].
 $$
 
 (Notice how the expectation is taken with regards to the joint distribution $p(x, y)$)
@@ -127,7 +127,7 @@ $$
 
 and for the KL-divergence:
 $$
-D(p(x_1, \cdots, x_n)||q(x_1, \cdots, x_n)) = \sum_{i=1}^{n} D(p(x_i|x_1,\cdots, x_{i-1})||q(x_i|x_1, \cdots,x_{i-1}))
+D(p(x_1, \cdots, x_n)\|\|q(x_1, \cdots, x_n)) = \sum_{i=1}^{n} D(p(x_i|x_1,\cdots, x_{i-1})\|\|q(x_i|x_1, \cdots,x_{i-1}))
 $$
 ***Remark:*** To prove any of the chain rules, just
 
@@ -171,7 +171,7 @@ Notice how the left hand side is similar to the definition of KL-divergence!
 
 Now, let's see some consequences of the application of these inequalities:
 
-+ KL-divergence is non-negative: $D(p||q)\geqslant 0$ with equality only when $p=q$.
++ KL-divergence is non-negative: $D(p\|\|q)\geqslant 0$ with equality only when $p=q$.
 
 + Mutual information and conditional mutual information are both non-negative: $I(X; Y|Z)\geqslant 0$ with equality only when $X$ and $Y$ are conditionally independent given $Z$.
 
@@ -187,10 +187,10 @@ Now, let's see some consequences of the application of these inequalities:
 
   with equality if and only if $X_i$'s are independent.
 
-+ (*Convexity of KL-divergence*) $D(p||q)$ is convex in the pair $(p, q)$; that is, for any two pairs of distributions $(p_1, q_1)$ and $(p_2, q_2)$ and any $\lambda \in [0, 1]$,
++ (*Convexity of KL-divergence*) $D(p\|\|q)$ is convex in the pair $(p, q)$; that is, for any two pairs of distributions $(p_1, q_1)$ and $(p_2, q_2)$ and any $\lambda \in [0, 1]$,
 
   $$
-  D(\lambda p_1 +(1-\lambda)p_2 || \lambda q_1 + (1-\lambda)q_2) \leqslant \lambda D(p_1||q_1) + (1-\lambda) D(p_2||q_2).
+  D(\lambda p_1 +(1-\lambda)p_2 \|\| \lambda q_1 + (1-\lambda)q_2) \leqslant \lambda D(p_1\|\|q_1) + (1-\lambda) D(p_2\|\|q_2).
   $$
 
 + (*Concavity of entropy*) $H(p)$ is a concave function of $p$. Thus, the entropy of mixture of distributions is as large as the mixture of their entropies. This result follows easily from the convexity of KL-divergence, because:
@@ -198,7 +198,7 @@ Now, let's see some consequences of the application of these inequalities:
 + Let $u$ be the uniform distribution over $\mathcal{X}$. For any distribution $p$ over $\mathcal{X}$, 
 
   $$
-  H(p) = H(u) - D(p||u) = \log {|\mathcal{X}|} - D(p||u)
+  H(p) = H(u) - D(p\|\|u) = \log {|\mathcal{X}|} - D(p\|\|u)
   $$
 
 ## Data-Processing Inequality
