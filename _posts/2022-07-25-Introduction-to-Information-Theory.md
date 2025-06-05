@@ -39,17 +39,17 @@ $$
 The **conditional entropy** of $Y$ given $X$ is defined as the expected entropy of $Y$ given the value of $X$:
 
 $$
-H(Y\midX) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(Y\midX)\right] \\
-            = -\sum_{x\in\mathcal{X}, y\in \mathcal{Y}}p(x, y)\log p(y\midx) \\
-    = \sum_{x\in \mathcal{X}}p(x)H(Y\midX=x).
+H(Y\mid X) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(Y\mid X)\right] \\
+            = -\sum_{x\in\mathcal{X}, y\in \mathcal{Y}}p(x, y)\log p(y\mid X) \\
+    = \sum_{x\in \mathcal{X}}p(x)H(Y\mid X=x).
 $$
 
-+ In general, $H(Y\midX) \neq H(X\midY)$. For example, consider $X \sim \mathrm{Uniform} (\{1, \cdots, 100\})$ and $Y=X \;\mathrm{mod}\; 10$.
++ In general, $H(Y\mid X) \neq H(X\mid Y)$. For example, consider $X \sim \mathrm{Uniform} (\{1, \cdots, 100\})$ and $Y=X \;\mathrm{mod}\; 10$.
 
 Because of the natural definition of entropy, many of the theorems about probability distributions translate naturally for entropy. For instance, we have the **chain rule**:
 
 $$
-H(X, Y) = H(X) + H(Y\midX)
+H(X, Y) = H(X) + H(Y\mid X)
 $$
 
 ## KL-divergence and Mutual Information
@@ -140,7 +140,7 @@ $$
 
 There are two main inequalities that are used in to provide bounds in the context of entropies: Jensen and log-sum inequalities. Before introducing them, some definitions:
 
-A function $f: (a, b) \to \R$ is *convex* if for every $x_1, x_2 \in (a, b)$ and $\lambda \in [0, 1]$, 
+A function $f: (a, b) \to \mathbb{R}$ is *convex* if for every $x_1, x_2 \in (a, b)$ and $\lambda \in [0, 1]$, 
 
 $$
 f(\lambda x_1 +(1-\lambda) x_2) \leqslant \lambda f(x_1) + (1-\lambda)f(x_2).
