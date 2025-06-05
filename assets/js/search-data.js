@@ -34,6 +34,17 @@ ninja.data = [{
             window.location.href = "/blog/2023/In-Praise-of-einsum/";
           
         },
+      },{id: "post-introduction-to-information-theory",
+        
+          title: "Introduction to Information Theory",
+        
+        description: "A brief introduction to information theory, definitions and basic theorems.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/Introduction-to-Information-Theory/";
+          
+        },
       },{
         id: 'social-email',
         title: 'email',
