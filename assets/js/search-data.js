@@ -56,7 +56,7 @@ ninja.data = [{
         title: 'X',
         section: 'Socials',
         handler: () => {
-          window.open("https://twitter.com/HedayatianSaeed# your X handle", "_blank");
+          window.open("https://twitter.com/HedayatianSaeed", "_blank");
         },
       },{
       id: 'light-theme',
