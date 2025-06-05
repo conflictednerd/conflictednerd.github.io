@@ -5,7 +5,9 @@ date: 2023-02-19 09:10:17
 description: A tutorial on einsum, Einstein summation notation.
 tags: jax numpy machine-learning
 categories: blog
-related_posts:false
+related_posts: false
+toc: true
+math: true
 ---
 
 This is a short note about the `einsum` functionality that is present in numpy, jax, etc. Understanding what it does is a bit tricky --naturally, because it can do the job of many other functions-- but it is also very rewarding as it can help a lot with linear algebraic computations. I will use numpy's `np.einsum()` notation, but the underlying concepts are the same regardless of slight syntactic differences in libraries.
