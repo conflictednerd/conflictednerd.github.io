@@ -23,15 +23,15 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
-        },{id: "post-",
+        },{id: "post-in-praise-of-einsum",
         
-          title: "",
+          title: "In Praise of Einsum",
         
-        description: "",
+        description: "A tutorial on einsum, Einstein summation notation.",
         section: "Posts",
         handler: () => {
           
-            window.location.href = "/blog/2025/2023-02-19-In-Praise-of-einsum/";
+            window.location.href = "/blog/2023/In-Praise-of-einsum/";
           
         },
       },{
