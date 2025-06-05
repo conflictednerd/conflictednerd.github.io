@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 subtitle: <a href='https://www.cs.usc.edu/'>Computer Science</a> at <a href='https://www.usc.edu/'>University of Southern California</a>
 
