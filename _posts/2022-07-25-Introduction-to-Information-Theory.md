@@ -19,7 +19,7 @@ Let $X$ be a discrete random variable with alphabet $\mathcal{X}$ and probabilit
 
 The **entropy** $H(X)$ of a discrete random variable $X$ is defined by
 $$
-H(X) = -\mathbb{E}_{X\sim p(x)}\left[\log p(X)\right] = - \sum\_{x\in\mathcal{X}}p(x)\log p(x).
+H(X) = -\mathbb{E}_{X\sim p(x)}\left[\log p(X)\right] = - \sum_{x\in\mathcal{X}}p(x)\log p(x).
 $$
 
 + Intuitively, the entropy $H(X)$ is a measure of how *informative* the observation of an instantiation of $X$ is. Alternatively, we can think of it as how *uncertain* we are about the value of $X$.
@@ -33,15 +33,15 @@ $$
 The **joint entropy** $H(X, Y)$ of a pair of random variables is just the entropy of their joint distribution:
 
 $$
-H(X, Y) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(X, Y)\right] = \sum\_{x\in\mathcal{X}, y\in\mathcal{Y}}p(x, y)\log p(x, y).
+H(X, Y) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(X, Y)\right] = \sum_{x\in\mathcal{X}, y\in\mathcal{Y}}p(x, y)\log p(x, y).
 $$
 
 The **conditional entropy** of $Y$ given $X$ is defined as the expected entropy of $Y$ given the value of $X$:
 
 $$
 H(Y|X) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(Y|X)\right] \\
-            = -\sum\_{x\in\mathcal{X}, y\in \mathcal{Y}}p(x, y)\log p(y|x) \\
-    = \sum\_{x\in \mathcal{X}}p(x)H(Y|X=x).
+            = -\sum_{x\in\mathcal{X}, y\in \mathcal{Y}}p(x, y)\log p(y|x) \\
+    = \sum_{x\in \mathcal{X}}p(x)H(Y|X=x).
 $$
 
 + In general, $H(Y|X) \neq H(X|Y)$. For example, consider $X \sim \mathrm{Uniform} (\{1, \cdots, 100\})$ and $Y=X \;\mathrm{mod}\; 10$.
@@ -57,7 +57,7 @@ $$
 The **Kullback-Leibler divergence** or **relative entropy** between two probability mass functions $p(x)$ and $q(x)$ is defined as
 
 $$
-D(p||q) = \mathbb{E}_{X\sim p(X)}\left[\log\frac{p(X)}{q(X)}\right] = \sum\_{x\in \mathcal{X}} p(x)\log\frac{p(x)}{q(x)}.
+D(p||q) = \mathbb{E}_{X\sim p(X)}\left[\log\frac{p(X)}{q(X)}\right] = \sum_{x\in \mathcal{X}} p(x)\log\frac{p(x)}{q(x)}.
 $$
 
 + In calculations, let $0\log {(\mathrm{whatever})} = 0$ and $p\log\frac{p}{0} = \infty$ for $p>0$.
@@ -98,7 +98,7 @@ $$
   I(X; Y) = H(X) + H(Y) - H(X, Y)
   $$
 
-  ![](/blog/resources/mutualinfodiagram.png#center)
+  ![mutual information diagram]({{ '/assets/img/blog/mutualinfodiagram.png' | relative_url }})
 
 ## Conditional Divergence and Mutual Information
 
