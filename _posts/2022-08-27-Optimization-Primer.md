@@ -25,15 +25,17 @@ The first two are covered in this post. Also, for derivative-free methods, only 
 ## The Optimization Problem
 
 In its most general form, an optimization problem has the following form:
+
 $$
 \mathrm{minimize}\;\; f(x) \;\;\mathrm{subject\;to} \;\; x \in \Omega \subseteq \mathbb{R}^n.
 $$
+
 Furthermore, the following assumptions commonly hold:
 
 + $f: \Omega \to \mathbb{R}$ is a smooth function,
 + The feasible set, $\Omega$, is defined by **finitely many** smooth constraints.
 
-The solution to this problem is a point $x^* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^* \in \Omega$ for which a neighborhood $\mathcal{N} (x^{*}, \delta)$ exists such that $f(x) \geqslant f(x^{*})$ for all $x \in \Omega \cap \mathcal{N}(x^{*}, \delta)$.  
+The solution to this problem is a point $x^{*}  \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^{*}  \in \Omega$ for which a neighborhood $$\mathcal{N} (x^{*}, \delta)$$ exists such that $f(x) \geqslant f(x^{*})$ for all $$x \in \Omega \cap \mathcal{N}(x^{*}, \delta)$$.  
 In the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.
 
 <div class="text-center">
@@ -44,12 +46,15 @@ In the figure below, you can see the function $f$ (blue) is constrained to the c
 
 Two simple, yet important special cases of the optimization problem are linear and quadratic optimization.  
 In linear optimization (programming), the objective function $f$ and the constraints that define $\Omega$ are all linear functions. So, a linear optimization problem has the following form:
+
 $$
 \min_{x\in \mathbb{R}^n} c^Tx \;\; \mathrm{subject\; to} \\
 a_i^Tx = b_i, \;\;\; \forall i \in I, \\
 a_j^Tx\geqslant b_j \;\;\; \forall j \in J.
 $$
+
 Quadratic programming is similar in that the constraints are linear, but the objective function becomes quadratic:
+
 $$
 \min_{x\in \mathbb{R}^n} c^Tx + \frac{1}{2}x^THx \;\; \mathrm{subject\; to} \\
 a_i^Tx = b_i, \;\;\; \forall i \in I, \\
@@ -65,15 +70,17 @@ Notice that in this section we are concerned with <u>unconstrained problems</u>.
 ### First Order Optimality Condition
 
 **Theorem:** Suppose
-$
+$$
 f \in
 \mathcal{C}
 ^1(\mathbb{R}^n)
-$
-(it's differentiable with a smooth derivative) and that $x^*$ is a local minimizer of $f$. Then, $x^*$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^*$ is zero.
 $$
-x^* \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^*) = 0.
+(it's differentiable with a smooth derivative) and that $x^{*} $ is a local minimizer of $f$. Then, $x^{*} $ is a stationary point for $f$, i.e., the gradient of $f$ at $x^{*} $ is zero.
+
 $$
+x^{*}  \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^{*} ) = 0.
+$$
+
 **An Aside:** Remember that $\nabla f (x) = [\frac{\partial f}{\partial x_1}(x), \cdots,\frac{\partial f}{\partial x_n}(x)]^T$.
 
 ### Second Order Optimality Condition
@@ -84,7 +91,7 @@ Not all stationary points are minimizers. A stationary point may be a saddle poi
 
 We also have a second order sufficient condition:
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^{*} \in \mathbb{R}^n$ is such that $\nabla f(x^*) = 0$ and $\nabla^2f(x^*)$ is <u>positive-definite</u>. Then, $x^*$ is surely a local minimizer of $f$.
+**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^{*} \in \mathbb{R}^n$ is such that $\nabla f(x^{*} ) = 0$ and $\nabla^2f(x^{*} )$ is <u>positive-definite</u>. Then, $x^{*} $ is surely a local minimizer of $f$.
 
 **An Aside:** Remember that $\nabla^2f(x)$ is a matrix, called the *Hessian*, defined as
 $$
@@ -199,9 +206,11 @@ As we saw, SD with line-search can have very slow convergence rates. The simples
 #### Newton's Method
 
 Let's revisit how we ended up with $-\nabla f(x_k)$ as the descent direction. In essence, we approximated $f$ near $x_k$ with a linear model. Using the Taylor expansion, this linear model was 
+
 $$
 m_k(s) = f(x_k) + \nabla f(x_k)^T s.
 $$
+
 Now, if we want to minimize this function (subject to $\|s\| = \|\nabla f(x_k)\|$ to bound the values from below), we should let $s=-\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.
 
 The idea behind Newton's method is to use a second order approximation to $f$. Suppose $B_k$ is a symmetric positive-definite matrix and that we choose to locally approximate $f$ by
@@ -210,14 +219,16 @@ m_k(s) = f(x_k) + \nabla f(x_k)^T s +\frac{1}{2}s^TB_ks.
 $$
 Because $B_k$ is positive-definite, this quadratic function has a unique minimum that can be found by:
 $$
-\nabla_s m_k(s^*) = 0 \implies -\nabla f(x_k) = B_ks^*.
+\nabla_s m_k(s^{*} ) = 0 \implies -\nabla f(x_k) = B_ks^{*} .
 $$
-So, to find the direction of descent we must solve this system of linear equations for $s^*$.
+So, to find the direction of descent we must solve this system of linear equations for $s^{*} $.
 
-One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^*$ is a descent direction:
+One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^{*}$ is a descent direction:
+
 $$
 s^T\nabla f(x_k) < 0 \implies -s^TB_ks < 0 \implies s^TB_ks >0.
 $$
+
 If $\nabla^2 f(x_k)$ is positive-definite, we can let $B_k = \nabla^2 f(x_k)$ as this would result in the best quadratic approximation of $f$ (Taylor expansion). This choice gives raise to an algorithm known as the *damped Newton method*.
 
 However, the Hessian need not be positive-definite, it may be that its positive-semidefinite. So this choice of $B_k$ requires $f$ to be locally strictly convex everywhere! Even if this is the case, we still need a number of additional assumptions to prove global convergence. To summarize, Newton's method
