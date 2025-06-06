@@ -35,7 +35,7 @@ Furthermore, the following assumptions commonly hold:
 + $f: \Omega \to \mathbb{R}$ is a smooth function,
 + The feasible set, $\Omega$, is defined by **finitely many** smooth constraints.
 
-The solution to this problem is a point $x^{*}  \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^{*}  \in \Omega$ for which a neighborhood $$\mathcal{N} (x^{*}, \delta)$$ exists such that $f(x) \geqslant f(x^{*})$ for all $$x \in \Omega \cap \mathcal{N}(x^{*}, \delta)$$.  
+The solution to this problem is a point $$x^{*}  \in \Omega$$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $$x^{*} \in \Omega$$ for which a neighborhood $$\mathcal{N} (x^{*}, \delta)$$ exists such that $$f(x) \geqslant f(x^{*})$$ for all $$x \in \Omega \cap \mathcal{N}(x^{*}, \delta)$$.  
 In the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.
 
 <div class="text-center">
