@@ -44,7 +44,7 @@ H(Y\mid X) = -\mathbb{E}_{X\sim p(x), Y\sim p(y)}\left[\log p(Y\mid X)\right] \\
     = \sum_{x\in \mathcal{X}}p(x)H(Y\mid X=x).
 $$
 
-+ In general, $H(Y\mid X) \neq H(X\mid Y)$. For example, consider $$X \sim \mathrm{Uniform} (\\{1, \cdots, 100 \\})$$ and $Y=X \;\mathrm{mod}\; 10$.
++ In general, $H(Y\mid X) \neq H(X\mid Y)$. For example, consider $$X \sim \mathrm{Uniform} (\{1, \cdots, 100 \})$$ and $Y=X \;\mathrm{mod}\; 10$.
 
 Because of the natural definition of entropy, many of the theorems about probability distributions translate naturally for entropy. For instance, we have the **chain rule**:
 

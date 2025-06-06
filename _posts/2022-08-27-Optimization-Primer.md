@@ -350,7 +350,7 @@ where $f: \mathbb{R}^n \to \mathbb{R}$ is a smooth objective function and $E, I$
 We refer to the set of points that satisfy the constraints as the feasible region, denoted by $\Omega$:
 
 $$
-\Omega = \\{x\in \mathbb{R}^n: c_E(x) = 0, \; c_I(x) \geqslant 0\}\
+\Omega = \{x\in \mathbb{R}^n: c_E(x) = 0, \; c_I(x) \geqslant 0\}
 $$
 
 
@@ -533,7 +533,7 @@ There are also some **limitations** to these methods:
 
 To illustrate how derivative-free methods work, we briefly discuss a model-based method. They underlaying idea is similar to what we did in derivative-based unconstrained optimization. Essentially, we want to create models of $f$ that are not based on the gradient. This means that we can't use Taylor models. So how are we to create such models? The idea is to create a model by interpolating $f$ on a set of appropriately chosen sample points.
 
-Assume we have a sample set $$Y = \\{y_1, \cdots, y_q \\}$$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$. 
+Assume we have a sample set $$Y = \{y_1, \cdots, y_q \}$$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$. 
 
 Our model $m_k(s)$ is again a simple linear or quadratic function of the following form
 

@@ -77,7 +77,7 @@ $$
 and 
 
 $$
-\mathcal{A} = \left[(\lambda_\mu, \lambda_\nu) \in \\{(u, v) \mathrm{\\;s.t.\\;} \forall (\mathbf{x}, \mathbf{y}) \in \mathcal{X}\times\mathcal{Y}: u(\mathbf{x}) - v(\mathbf{y}) \leqslant C(\mathbf{x}, \mathbf{y})\\}\right].
+\mathcal{A} = \left[(\lambda_\mu, \lambda_\nu) \in \{(u, v) \mathrm{\\;s.t.\\;} \forall (\mathbf{x}, \mathbf{y}) \in \mathcal{X}\times\mathcal{Y}: u(\mathbf{x}) - v(\mathbf{y}) \leqslant C(\mathbf{x}, \mathbf{y})\}\right].
 $$
 
 We can set the damping distribution $d_\xi (\mathbf{x}, \mathbf{y})\propto 1$ for discrete domains and $d_\xi (\mathbf{x}, \mathbf{y}) = d_\mu(\mathbf{x})d_\nu(\mathbf{y})$ for continuous domains.
@@ -189,7 +189,7 @@ Imagine a simple scenario in which we have a policy $b$ for doing some task $T_1
 #### Algorithm
 
 1. for $t = 1, \cdots, T$:
-   1. Collect trajectories $$\\{\tau_i^\pi\\}_{i=1}^M$$ using policy $$\pi_{t-1} = \pi_{\theta_{t-1}}$$ and add them to the buffer $$B_\pi$$
+   1. Collect trajectories $\\{\tau_i^\pi\\}_{i=1}^M$ using policy $$\pi_{t-1} = \pi_{\theta_{t-1}}$$ and add them to the buffer $$B_\pi$$
    2. Collect trajectories $\\{\tau_i^b\\\}_{i=1}^M$ using policy $b$ and add them to the buffer $B_b$
    3. Update behavioral test functions $\lambda_\pi, \lambda_b$ with *Random Features Wasserstein SGD*
    4. Optimize the policy by taking SGA step $$\theta_t = \theta_{t-1} + \eta \hat\nabla_\theta \hat F(\theta_{t-1})$$
