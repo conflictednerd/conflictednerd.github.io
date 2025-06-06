@@ -5,7 +5,7 @@ date: 2022-07-25 20:22:16
 description: A brief introduction to information theory, definitions and basic theorems.
 tags: information-theory entropy divergence
 categories: blog
-related_posts: false
+related_posts: true
 toc: true
 math: true
 ---
@@ -98,7 +98,9 @@ $$
   I(X; Y) = H(X) + H(Y) - H(X, Y)
   $$
 
-  ![mutual information diagram]({{ '/assets/img/blog/mutualinfodiagram.png' | relative_url }})
+<div class="text-center">
+  <img src="/assets/img/blog/mutualinfodiagram.png" class="img-fluid" style="max-width: 70%;" />
+</div>
 
 ## Conditional Divergence and Mutual Information
 
