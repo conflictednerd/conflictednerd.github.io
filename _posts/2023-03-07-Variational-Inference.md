@@ -127,7 +127,11 @@ $$
 
 Therefore $D_\mathrm{KL} (q_i(z) \| p(z \mid x_i))$ is actually the approximation error when we use $\mathcal{L}_i(p, q_i)$ instead of $\log p(x_i)$.
 
-This suggests a natural optimization scheme to push up the value of $p_\theta (x_i)$: we can alternate between maximizing $\mathcal{L}_{i} (p_\theta, q_i)$ w.r.t. $q_i$ to tighten the bound (which is equivalent to minimizing the KL), and maximizing $\mathcal{L}_{i} (p_\theta, q_i)$ w.r.t. $\theta$ to push up the lower bound.
+This suggests a natural optimization scheme to push up the value of $p_\theta (x_i)$: we can alternate between maximizing 
+$\mathcal{L}_{i} (p_\theta, q_i)$
+w.r.t. $q_i$ to tighten the bound (which is equivalent to minimizing the KL), and maximizing
+$\mathcal{L}_{i} (p_\theta, q_i)$
+w.r.t. $\theta$ to push up the lower bound.
 
 <div class="text-center">
   <img src="/assets/img/blog/vi1.png" class="img-fluid" style="max-width: 70%;" />
@@ -137,12 +141,16 @@ To sum it all up, take a look at the algorithm below.
 + for each $x_i$ (or minibatch)
 	+ calculate $\nabla_\theta\mathcal{L}_{i} (p, q_i)$ by
 		+ sample $z \sim q_i$
-		+ let $\nabla_{\theta} \mathcal{L}_{i} (p, q_{i}) \approx \nabla_{\theta} \log p_{\theta} (x_i \mid z)$
+		+ let $$\nabla_{\theta} \mathcal{L}_{i} (p, q_{i}) \approx \nabla_{\theta} \log p_{\theta} (x_i \mid z)$$
 	+ let $\theta \leftarrow \theta + \alpha \nabla_\theta \mathcal{L}_i(p, q_i)$
 	+ update $q_i$ to tighten the bound by
 		+ let $q_i \leftarrow \arg \max_{q_i} \mathcal{L}_i(p, q_i)$
 
-This algorithm could have been fully practical if not for the last step. We have not specified how one should update $q_i$ to maximize $\mathrm{ELBO}$ (or to minimize the KL). In the special case when $q_i \sim \mathcal{N} (\mu_{i}, \sigma_{i})$, we can analytically compute $\nabla_{\mu_{i}} \mathcal{L}_{i} (p, q_i)$ and $\nabla_{\sigma_{i}} \mathcal{L}_{i} (p, q_{i})$ and use them to update parameters (here, mean and variance) of $q_i$ using gradient ascent. But even this requires us to store one set of parameters for each $q_i$, resulting in a total of $N \times (\mid \mu_{z} \mid  + \mid \sigma_{z} \mid )$. This means that the number of parameters grows with the size of the dataset, which is impractical. In the next section, we will maintain exactly how $q_i$'s should be updated and use amortized inference to manage the number of parameters.
+This algorithm could have been fully practical if not for the last step. We have not specified how one should update $q_i$ to maximize $\mathrm{ELBO}$ (or to minimize the KL). In the special case when $q_i \sim \mathcal{N} (\mu_{i}, \sigma_{i})$, we can analytically compute
+$$\nabla_{\mu_{i}} \mathcal{L}_{i} (p, q_{i})$$
+and
+$\nabla_{\sigma_{i}} \mathcal{L}_{i} (p, q_{i})$
+and use them to update parameters (here, mean and variance) of $q_i$ using gradient ascent. But even this requires us to store one set of parameters for each $q_i$, resulting in a total of $N \times (\mid \mu_{z} \mid  + \mid \sigma_{z} \mid )$. This means that the number of parameters grows with the size of the dataset, which is impractical. In the next section, we will maintain exactly how $q_i$'s should be updated and use amortized inference to manage the number of parameters.
 #### Amortized VI
 The idea of amortized variational inference is to use a network parametrized by $\phi$ to represent the approximate posterior for all data points. This would break the dependence of the number of parameters to the size of the dataset. This network, denoted by $q_\phi(z\mid x)$ would take as input a data point $x$ and output the distribution $q_i(z)$. A common choice, used in VAEs is to have
 

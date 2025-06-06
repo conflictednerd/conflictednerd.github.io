@@ -80,18 +80,18 @@ $$
 
 Not all stationary points are minimizers. A stationary point may be a saddle point or even a maximizer! So, we need to add some other condition if we are to distinguish minimizers from other types of stationary points. The second order necessary condition gives us precisely this.
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^*$ is a local minimizer of $f$. Then, $\nabla^2f(x^*)$ is <u>positive-semidefinite</u>.
+**Theorem:** Suppose $f\in \mathcal{C}^{2} (\mathbb{R}^{n})$ and that $x^{*}$ is a local minimizer of $f$. Then, $\nabla^{2} f(x^{*})$ is <u>positive-semidefinite</u>.
 
 We also have a second order sufficient condition:
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^*\in \mathbb{R}^n$ is such that $\nabla f(x^*) = 0$ and $\nabla^2f(x^*)$ is <u>positive-definite</u>. Then, $x^*$ is surely a local minimizer of $f$.
+**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^{*} \in \mathbb{R}^n$ is such that $\nabla f(x^*) = 0$ and $\nabla^2f(x^*)$ is <u>positive-definite</u>. Then, $x^*$ is surely a local minimizer of $f$.
 
 **An Aside:** Remember that $\nabla^2f(x)$ is a matrix, called the *Hessian*, defined as
 $$
 \nabla^2 f(x) =
 \begin{bmatrix}
-&\frac{\partial^2 f}{\partial x_1^2}(x), \cdots, &\frac{\partial^2 f}{\partial x_1\partial x_n}(x) \\\\
-&\vdots \ddots &\vdots \\\\
+&\frac{\partial^2 f}{\partial x_1^2}(x), \cdots, &\frac{\partial^2 f}{\partial x_1\partial x_n}(x) \\
+&\vdots \ddots &\vdots \\
 &\frac{\partial^2 f}{\partial x_n \partial x_1}(x), \cdots, &\frac{\partial^2 f}{\partial x_n^2}(x)
 \end{bmatrix}.
 $$
