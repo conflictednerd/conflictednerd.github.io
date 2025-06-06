@@ -33,7 +33,7 @@ Furthermore, the following assumptions commonly hold:
 + $f: \Omega \to \mathbb{R}$ is a smooth function,
 + The feasible set, $\Omega$, is defined by **finitely many** smooth constraints.
 
-The solution to this problem is a point $x^\* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^\* \in \Omega$ for which a neighborhood $\mathcal{N}(x^\*, \delta)$ exists such that $f(x)\geqslant f(x^\*)$ for all $x \in \Omega \cap \mathcal{N}(x^\*, \delta)$.  
+The solution to this problem is a point $x^* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^* \in \Omega$ for which a neighborhood $\mathcal{N}(x^*, \delta)$ exists such that $f(x)\geqslant f(x^*)$ for all $x \in \Omega \cap \mathcal{N}(x^*, \delta)$.  
 In the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.
 
 <img src="/assets/img/blog/optima.png" style="zoom:50%;" />
@@ -62,9 +62,9 @@ Notice that in this section we are concerned with <u>unconstrained problems</u>.
 
 ### First Order Optimality Condition
 
-**Theorem:** Suppose $f \in \mathcal{C}^1(\mathbb{R}^n)$ (it's differentiable with a smooth derivative) and that $x^\*$ is a local minimizer of $f$. Then, $x^\*$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^\*$ is zero.
+**Theorem:** Suppose $f \in \mathcal{C}^1(\mathbb{R}^n)$ (it's differentiable with a smooth derivative) and that $x^*$ is a local minimizer of $f$. Then, $x^*$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^*$ is zero.
 $$
-x^\* \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^\*) = 0.
+x^* \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^*) = 0.
 $$
 **An Aside:** Remember that $\nabla f (x) = [\frac{\partial f}{\partial x_1}(x), \cdots,\frac{\partial f}{\partial x_n}(x)]^T$.
 
@@ -72,11 +72,11 @@ $$
 
 Not all stationary points are minimizers. A stationary point may be a saddle point or even a maximizer! So, we need to add some other condition if we are to distinguish minimizers from other types of stationary points. The second order necessary condition gives us precisely this.
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^\*$ is a local minimizer of $f$. Then, $\nabla^2f(x^\*)$ is <u>positive-semidefinite</u>.
+**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^*$ is a local minimizer of $f$. Then, $\nabla^2f(x^*)$ is <u>positive-semidefinite</u>.
 
 We also have a second order sufficient condition:
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^\*\in \mathbb{R}^n$ is such that $\nabla f(x^\*) = 0$ and $\nabla^2f(x^\*)$ is <u>positive-definite</u>. Then, $x^\*$ is surely a local minimizer of $f$.
+**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^*\in \mathbb{R}^n$ is such that $\nabla f(x^*) = 0$ and $\nabla^2f(x^*)$ is <u>positive-definite</u>. Then, $x^*$ is surely a local minimizer of $f$.
 
 **An Aside:** Remember that $\nabla^2f(x)$ is a matrix, called the *Hessian*, defined as
 $$
@@ -200,11 +200,11 @@ m_k(s) = f(x_k) + \nabla f(x_k)^T s +\frac{1}{2}s^TB_ks.
 $$
 Because $B_k$ is positive-definite, this quadratic function has a unique minimum that can be found by:
 $$
-\nabla_s m_k(s^\*) = 0 \implies -\nabla f(x_k) = B_ks^\*.
+\nabla_s m_k(s^*) = 0 \implies -\nabla f(x_k) = B_ks^*.
 $$
-So, to find the direction of descent we must solve this system of linear equations for $s^\*$.
+So, to find the direction of descent we must solve this system of linear equations for $s^*$.
 
-One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^\*$ is a descent direction:
+One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^*$ is a descent direction:
 $$
 s^T\nabla f(x_k) < 0 \implies -s^TB_ks < 0 \implies s^TB_ks >0.
 $$
@@ -429,7 +429,7 @@ $$
 $$
 where $f:\mathbb{R}^n\to\mathbb{R}$ and $c:\mathbb{R}^n\to\mathbb{R}^m$ are smooth functions.
 
-Again, the idea is to turn this into an unconstrained optimization. \*\*Barrier function\*\* methods are one way of doing this. For $\mu > 0$, the corresponding \*\*logarithmic barrier subproblem\*\* is defined as
+Again, the idea is to turn this into an unconstrained optimization. **Barrier function** methods are one way of doing this. For $\mu > 0$, the corresponding **logarithmic barrier subproblem** is defined as
 $$
 \min_{x\in \mathbb{R}^n} f_\mu := f(x) - \mu\sum_{i} \log c_i(x) \\\\
 \mathrm{subject\; to} \;\; c(x) > 0.
