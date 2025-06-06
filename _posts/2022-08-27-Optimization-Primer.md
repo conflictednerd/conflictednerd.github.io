@@ -45,14 +45,14 @@ In the figure below, you can see the function $f$ (blue) is constrained to the c
 Two simple, yet important special cases of the optimization problem are linear and quadratic optimization.  
 In linear optimization (programming), the objective function $f$ and the constraints that define $\Omega$ are all linear functions. So, a linear optimization problem has the following form:
 $$
-\min_{x\in \mathbb{R}^n} c^Tx \;\; \mathrm{subject\; to} \\\\
-a_i^Tx = b_i, \;\;\; \forall i \in I, \\\\
+\min_{x\in \mathbb{R}^n} c^Tx \;\; \mathrm{subject\; to} \\
+a_i^Tx = b_i, \;\;\; \forall i \in I, \\
 a_j^Tx\geqslant b_j \;\;\; \forall j \in J.
 $$
 Quadratic programming is similar in that the constraints are linear, but the objective function becomes quadratic:
 $$
-\min_{x\in \mathbb{R}^n} c^Tx + \frac{1}{2}x^THx \;\; \mathrm{subject\; to} \\\\
-a_i^Tx = b_i, \;\;\; \forall i \in I, \\\\
+\min_{x\in \mathbb{R}^n} c^Tx + \frac{1}{2}x^THx \;\; \mathrm{subject\; to} \\
+a_i^Tx = b_i, \;\;\; \forall i \in I, \\
 a_j^Tx\geqslant b_j \;\;\; \forall j \in J.
 $$
 
@@ -328,8 +328,8 @@ In this chapter we move on to study constrained optimization problems. Again, we
 
 Mathematically, a constrained optimization problem is formulated as
 $$
-\min_{x\in \mathbb{R}^n} f(x) \;\; \mathrm{subject\; to} \\\\
-c_E(x) = 0, \\\\
+\min_{x\in \mathbb{R}^n} f(x) \;\; \mathrm{subject\; to} \\
+c_E(x) = 0, \\
 c_I(x) \geqslant 0,
 $$
 where $f: \mathbb{R}^n \to \mathbb{R}$ is a smooth objective function and $E, I$ are index sets. By $c_I(x) \geqslant 0$ we mean $c_i(x) \geqslant 0$ for all $i\in I$, and similarly for $c_E$. All  of the constraints $c_i$ are smooth functions.
@@ -349,16 +349,20 @@ As we saw in the first chapter, solutions to an unconstrained optimization probl
 </div>
 
 The analogue of stationarity in constrained problems is the Karush-Kuhn-Tucker (KKT) conditions. KKT condition helps us characterize solutions in terms of derivatives.
+
 $$
-\mathrm{unconstrained \; problems} \longrightarrow \hat{x}\;\mathrm{is \; stationary \; point}\; (\nabla f(\hat{x}) = 0) \\\\
+\mathrm{unconstrained \; problems} \longrightarrow \hat{x}\;\mathrm{is \; stationary \; point}\; (\nabla f(\hat{x}) = 0) \\
 \mathrm{constrained \; problems} \longrightarrow \hat{x}\;\mathrm{is \; KKT \; point}
 $$
+
 To introduce the KKT conditions, we first need to define the Lagrangian function of a constrained optimization problem.
 
 The **Lagrangian function** of a constrained optimization problem is defined as
+
 $$
 \mathcal{L}(x, y, \lambda) := f(x) - \sum_{j\in E} {y_j c_j (x)} - \sum_{i\in I} {\lambda_i c_i(x)}.
 $$
+
 The values $y, \lambda$ are known as *Lagrange multipliers*. The Lagrangian compresses the objective and the constraints of a problem into a single expression.
 
 A point $\hat x$ is a KKT point of a constrained problem if multipliers $(\hat y, \hat \lambda)$ exist such that
@@ -374,13 +378,18 @@ To further illustrate this, look at the example plotted in the beginning of this
 Also, note that the condition 4 ensures that we are on the "correct side" of inactive conditions.
 
 With these explanations in mind, let's take a closer look at condition 1. The gradient of the Lagrangian with respect to $x$ is
+
 $$
 \nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = \nabla f(x) - \sum_{j\in E} {y_j \nabla c_j (x)} - \sum_{i\in I} {\lambda_i \nabla c_i(x)}.
 $$
+
 If we take it to be zero, we get
+
 $$
-\nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = 0 \\\\ \implies \nabla f(x) = \sum_{j\in E} {y_j \nabla c_j (x)} + \sum_{i\in I} {\lambda_i \nabla c_i(x)}.
+\nabla_x \mathcal{L}(\hat x, \hat y, \hat \lambda) = 0 \\
+\implies \nabla f(x) = \sum_{j\in E} {y_j \nabla c_j (x)} + \sum_{i\in I} {\lambda_i \nabla c_i(x)}.
 $$
+
 In words, condition 1 is maintaining that at a KKT point, the **gradient of the objective must be a linear combination of the gradients of (active) constraints**.
 
 **A Caveat:** In general, not every KKT point is an optimal point for the constrained optimization problem. We also need the constraints to satisfy some regularity assumptions known as *constraint qualifications* in order to derive necessary optimality conditions (for instance, the feasible region defined by the constraints must have an interior). A good news is that if the constraints are linear (as is the case for linear and quadratic programming), no constraint qualification is required.
@@ -392,17 +401,21 @@ In words, condition 1 is maintaining that at a KKT point, the **gradient of the 
 ### Quadratic Penalty (Equality Constraints)
 
 Let's focus our attention on optimization problems that only have equality constraints. We can formulate these problems as
+
 $$
 \min_{x\in\mathbb{R}^n} f(x) \;\;\mathrm{subject\;to} \;\; c(x) = 0,
 $$
+
 where $f:\mathbb{R}^n\to\mathbb{R}$ and $c:\mathbb{R}^n\to\mathbb{R}^m$ are smooth functions.
 
 One idea for solving such problems is to *form a single, parametrized and unconstrained objective, whose minimizers approach the solutions to the initial problem as the parameter value varies*.
 
 The **quadratic penalty function** is one such function. It is defined as
+
 $$
 \Phi_\sigma (x) := f(x) + \frac{1}{2\sigma}\|c(x)\|^2,
 $$
+
 where $\sigma > 0$ is the penalty parameter. Now instead of solving the original problem, we solve the unconstrained minimization of $\Phi_\sigma$.
 
 Notice that a minimizer of $\Phi_\sigma$ does not necessarily satisfy the constraint. But, as we let $\sigma \to 0$, we penalize infeasible points more and more, and force  the solution to satisfy the constraint.
@@ -438,16 +451,20 @@ Quadratic Penalty Method(QP):
 ### Interior Point (Inequality Constraints)
 
 Now let's see how we can deal with inequality constraints. For the sake of simplicity, assume that we only have inequality constraints. So our problem can be written as
+
 $$
 \min_{x\in\mathbb{R}^n} f(x) \;\;\mathrm{subject\;to} \;\; c(x) \geqslant 0,
 $$
+
 where $f:\mathbb{R}^n\to\mathbb{R}$ and $c:\mathbb{R}^n\to\mathbb{R}^m$ are smooth functions.
 
 Again, the idea is to turn this into an unconstrained optimization. **Barrier function** methods are one way of doing this. For $\mu > 0$, the corresponding **logarithmic barrier subproblem** is defined as
+
 $$
-\min_{x\in \mathbb{R}^n} f_\mu := f(x) - \mu\sum_{i} \log c_i(x) \\\\
+\min_{x\in \mathbb{R}^n} f_\mu := f(x) - \mu\sum_{i} \log c_i(x) \\
 \mathrm{subject\; to} \;\; c(x) > 0.
 $$
+
 Notice that in essence, this is an unconstrained optimization because the log barrier prevents the optimization algorithm to "go over" the constraint boundary. Let's focus on this a bit more. How does the log transformation help us stay inside the feasible region? Consider what happens at the boundaries of the constraints. If we get close to the boundaries of the $i$-th constraint, the $\log$ term approaches $-\infty$. Thus, the value of the barrier function gets very large. This means that if we are at a point $x$ inside the feasible region and take an optimizing, step we will stay inside the feasible region because the barrier function increases sharply as we get closer to the boundary, provided that the optimizing step is not so large that we go over the barrier entirely (which can be guaranteed by forcing our line-search or trust-region method to respect $c(x) > 0$ when computing their step sizes). Therefore, we are guaranteed to stay inside the feasible region.
 
 But there is a drawback to this. First, note that the $\log$ terms also change the landscape inside the feasible region. So a solution to the logarithmic barrier subproblem is not necessarily a local minimizer of the original objective. Furthermore, the local minimizer of the original objective may be on the boundary! If this is the case, the logarithmic subproblem will never reach it. 
@@ -505,19 +522,25 @@ To illustrate how derivative-free methods work, we briefly discuss a model-based
 Assume we have a sample set $Y = \{y_1, \cdots, y_q\}$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$. 
 
 Our model $m_k(s)$ is again a simple linear or quadratic function of the following form
+
 $$
 m_k(s) = c + s^Tg \;\;(+\frac{1}{2}s^THs),
 $$
+
 where $c\in\mathbb{R}$, $g\in \mathbb{R}^n$ (, $H \in \mathbb{R}^{n\times n}$) are unknowns. To find these unknowns, <u>we don't use gradients or Hessians</u>! Instead, we compute them to satisfy the interpolation conditions for the set of sampled points:
+
 $$
 \forall y \in Y \;\; m_k(y - x_k) = f(y).
 $$
+
 We need $q=n+1$ sample points to find the parameters of a linear model (i.e., $H=0$) and $q = \frac{(n+1)(n+2)}{2}$ points for a quadratic model.
 
 Once we have a model, we use it just like in the derivative-based trust-region method, i.e., (because $m_k$ is non-convex) we add a trust-region constraint and solve
+
 $$
 s_k = \arg \min_{s\in \mathbb{R}^n} m_k(s) \;\; \mathrm{subject \; to} \;\; \|s\| \leqslant \Delta_k.
 $$
+
 We use $\rho_k$ to measure progress and proceed exactly like in the derivative-based method.
 
 Because recomputing $m_k$ requires many new function evaluations, we instead *update* it by removing one point from the sample set, $Y$, and replacing it with a new point.
