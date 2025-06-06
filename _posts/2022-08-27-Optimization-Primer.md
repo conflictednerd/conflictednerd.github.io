@@ -104,7 +104,7 @@ $$
 $$
 Notice that the Hessian matrix is always symmetric. This is particularly convenient, as it means that the Hessian is diagonalizable and its eigenvectors can be chosen to be orthonormal.
 
-**Another Aside:** Remember that a <u>symmetric</u> matrix $M$ is called positive-definite if for all vectors $x\in \mathbb{R}^n \backslash \{0\}$, we have $x^TMx > 0$. Similarly, $M$ is positive-semidefinite if $x^TMx \geqslant 0$.  
+**Another Aside:** Remember that a <u>symmetric</u> matrix $M$ is called positive-definite if for all vectors $x\in \mathbb{R}^n \backslash \\{0 \\}$, we have $x^TMx > 0$. Similarly, $M$ is positive-semidefinite if $x^TMx \geqslant 0$.  
 Alternatively, we could say that $M$ is positive-definite iff all its eigenvalues are positive and it is positive-semidefinite iff all its eigenvalues are non-negative. It is often useful to think of definiteness like this, in terms of eigenvalues.
 
 
@@ -338,16 +338,19 @@ This section ends by mentioning some remarks about line-search and trust-region 
 In this chapter we move on to study constrained optimization problems. Again, we have an objective function $f: \mathbb{R}^n \to \mathbb{R}$  that we want to minimize. But now, we have a set of equality and inequality constraints that our solution must satisfy. These constraints are smooth, but can be very complicated functions. Furthermore, although each of them is smooth, their union may specify a feasible region with a lot of "rough edges". Consider linear programming for instance: there all of the constraints are linear, but the feasible region can be a polygon with many sides and sharp corners. In fact, this is precisely what makes linear programming hard.
 
 Mathematically, a constrained optimization problem is formulated as
+
 $$
 \min_{x\in \mathbb{R}^n} f(x) \;\; \mathrm{subject\; to} \\
 c_E(x) = 0, \\
 c_I(x) \geqslant 0,
 $$
+
 where $f: \mathbb{R}^n \to \mathbb{R}$ is a smooth objective function and $E, I$ are index sets. By $c_I(x) \geqslant 0$ we mean $c_i(x) \geqslant 0$ for all $i\in I$, and similarly for $c_E$. All  of the constraints $c_i$ are smooth functions.
 
 We refer to the set of points that satisfy the constraints as the feasible region, denoted by $\Omega$:
+
 $$
-\Omega = \{x\in \mathbb{R}^n: c_E(x) = 0, \; c_I(x) \geqslant 0\}
+\Omega = \\{x\in \mathbb{R}^n: c_E(x) = 0, \; c_I(x) \geqslant 0\}\
 $$
 
 
@@ -530,7 +533,7 @@ There are also some **limitations** to these methods:
 
 To illustrate how derivative-free methods work, we briefly discuss a model-based method. They underlaying idea is similar to what we did in derivative-based unconstrained optimization. Essentially, we want to create models of $f$ that are not based on the gradient. This means that we can't use Taylor models. So how are we to create such models? The idea is to create a model by interpolating $f$ on a set of appropriately chosen sample points.
 
-Assume we have a sample set $Y = \{y_1, \cdots, y_q\}$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$. 
+Assume we have a sample set $$Y = \\{y_1, \cdots, y_q \\}$$ and that we have evaluated $f$ at these points. Furthermore, assume that $x_k \in Y$ is the current iterate which is the most optimal point in $Y$, i.e., $f(x_k)\leqslant f(y)$ for all $y\in Y$. 
 
 Our model $m_k(s)$ is again a simple linear or quadratic function of the following form
 

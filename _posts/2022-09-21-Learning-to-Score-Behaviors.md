@@ -77,7 +77,7 @@ $$
 and 
 
 $$
-\mathcal{A} = \left[(\lambda_\mu, \lambda_\nu) \in \{(u, v) \mathrm{\\;s.t.\\;} \forall (\mathbf{x}, \mathbf{y}) \in \mathcal{X}\times\mathcal{Y}: u(\mathbf{x}) - v(\mathbf{y}) \leqslant C(\mathbf{x}, \mathbf{y})\}\right].
+\mathcal{A} = \left[(\lambda_\mu, \lambda_\nu) \in \\{(u, v) \mathrm{\\;s.t.\\;} \forall (\mathbf{x}, \mathbf{y}) \in \mathcal{X}\times\mathcal{Y}: u(\mathbf{x}) - v(\mathbf{y}) \leqslant C(\mathbf{x}, \mathbf{y})\\}\right].
 $$
 
 We can set the damping distribution $d_\xi (\mathbf{x}, \mathbf{y})\propto 1$ for discrete domains and $d_\xi (\mathbf{x}, \mathbf{y}) = d_\mu(\mathbf{x})d_\nu(\mathbf{y})$ for continuous domains.
@@ -145,7 +145,7 @@ with $$\lambda_1^{*}, \lambda_2^{*}$$ being the optimal dual functions. The maps
    2. Update $$\begin{pmatrix}\mathbf{p}_{t}^\mu \\ \\ \mathbf{p}_{t}^\nu\end{pmatrix}$$ using **BEM update step**.
 3. **Return:** $\mathbf{p}_M^\mu, \mathbf{p}_M^\nu$.
 
-**How does this work in practice?** Let's say we have a base policy $b$ and another policy $\pi$ and we want to estimate $$\mathrm{WD}_\gamma (\mathbb{P}_b^\Phi, \mathbb{P}_\pi^\Phi)$$. Note that these can be random variables; for instance, $b$ might be chosen uniformly from a set of policies $B = \{b_1, \cdots, b_n\}$. First, we need to choose a behavior embedding map $\Phi: \Gamma \to \mathbb{R}^d$ that maps trajectories into $d$ dimensional vectors. Then, we must initialize random feature maps $$\phi_b, \phi_\pi: \mathbb{R}^d \to \mathbb{R}^m$$ that map the outputs of $\Phi$ to $\mathbb{R}^m$. From what I understood from the code, we can use a single random feature map for both $b$ and $\pi$. Assuming this is the case, we essentially need to initialize $$\phi(\mathbf{z}) = \frac{1}{\sqrt m} \cos (\mathbf{Gz} + \mathbf{b})$$. To do so, we sample $$\mathbf{G} \in \mathbb{R}^{m\times d}$$ from $$\mathcal{N}(0, 1)$$ and $\mathbf{b} \in \mathbb{R}^m$ from $\mathrm{Uniform}(0, 2\pi)$. Next, we initialize dual parameter vectors $\mathbf{p}^\pi, \mathbf{p}^b$ that will be optimized. Finally, we need to run $\pi$ and $b$ to obtain $k$ sample trajectories. These trajectories are saved in buffers $B_\pi, B_b$. (Actually, we only need the behavior embedding of the trajectories, i.e., $\Phi(\tau)$s). The last step is to run SGD to find optimal parameters $$\mathbf{p}_{*}^\pi, \mathbf{p}_{*}^b$$. This is done using the algorithm presented above, where sampling $(x_t, y_t) \sim \mu \otimes\nu$ is analogues to sampling from the buffers.
+**How does this work in practice?** Let's say we have a base policy $b$ and another policy $\pi$ and we want to estimate $$\mathrm{WD}_\gamma (\mathbb{P}_b^\Phi, \mathbb{P}_\pi^\Phi)$$. Note that these can be random variables; for instance, $b$ might be chosen uniformly from a set of policies $B = \\{b_1, \cdots, b_n\\}$. First, we need to choose a behavior embedding map $\Phi: \Gamma \to \mathbb{R}^d$ that maps trajectories into $d$ dimensional vectors. Then, we must initialize random feature maps $$\phi_b, \phi_\pi: \mathbb{R}^d \to \mathbb{R}^m$$ that map the outputs of $\Phi$ to $\mathbb{R}^m$. From what I understood from the code, we can use a single random feature map for both $b$ and $\pi$. Assuming this is the case, we essentially need to initialize $$\phi(\mathbf{z}) = \frac{1}{\sqrt m} \cos (\mathbf{Gz} + \mathbf{b})$$. To do so, we sample $$\mathbf{G} \in \mathbb{R}^{m\times d}$$ from $$\mathcal{N}(0, 1)$$ and $\mathbf{b} \in \mathbb{R}^m$ from $\mathrm{Uniform}(0, 2\pi)$. Next, we initialize dual parameter vectors $\mathbf{p}^\pi, \mathbf{p}^b$ that will be optimized. Finally, we need to run $\pi$ and $b$ to obtain $k$ sample trajectories. These trajectories are saved in buffers $B_\pi, B_b$. (Actually, we only need the behavior embedding of the trajectories, i.e., $\Phi(\tau)$s). The last step is to run SGD to find optimal parameters $$\mathbf{p}_{*}^\pi, \mathbf{p}_{*}^b$$. This is done using the algorithm presented above, where sampling $(x_t, y_t) \sim \mu \otimes\nu$ is analogues to sampling from the buffers.
 
 When all is set and done, we have $$\mathbf{p}_{*}^\pi, \mathbf{p}_{*}^b$$ and we can write
 
@@ -189,8 +189,8 @@ Imagine a simple scenario in which we have a policy $b$ for doing some task $T_1
 #### Algorithm
 
 1. for $t = 1, \cdots, T$:
-   1. Collect trajectories $\{\tau_i^\pi\}_{i=1}^M$ using policy $\pi_{t-1} = \pi_{\theta_{t-1}}$ and add them to the buffer $B_\pi$
-   2. Collect trajectories $\{\tau_i^b\}_{i=1}^M$ using policy $b$ and add them to the buffer $B_b$
+   1. Collect trajectories $$\\{\tau_i^\pi\\}_{i=1}^M$$ using policy $$\pi_{t-1} = \pi_{\theta_{t-1}}$$ and add them to the buffer $$B_\pi$$
+   2. Collect trajectories $\\{\tau_i^b\\\}_{i=1}^M$ using policy $b$ and add them to the buffer $B_b$
    3. Update behavioral test functions $\lambda_\pi, \lambda_b$ with *Random Features Wasserstein SGD*
    4. Optimize the policy by taking SGA step $$\theta_t = \theta_{t-1} + \eta \hat\nabla_\theta \hat F(\theta_{t-1})$$
    5. Clear the buffers
