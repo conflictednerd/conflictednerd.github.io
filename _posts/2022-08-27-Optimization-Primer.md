@@ -75,10 +75,10 @@ f \in
 \mathcal{C}
 ^1(\mathbb{R}^n)
 $$
-(it's differentiable with a smooth derivative) and that $x^{*} $ is a local minimizer of $f$. Then, $x^{*} $ is a stationary point for $f$, i.e., the gradient of $f$ at $x^{*} $ is zero.
+(it's differentiable with a smooth derivative) and that $$x^{*}$$ is a local minimizer of $f$. Then, $$x^{*}$$ is a stationary point for $f$, i.e., the gradient of $f$ at $$x^{*}$$ is zero.
 
 $$
-x^{*}  \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^{*} ) = 0.
+x^{*} \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^{*} ) = 0.
 $$
 
 **An Aside:** Remember that $\nabla f (x) = [\frac{\partial f}{\partial x_1}(x), \cdots,\frac{\partial f}{\partial x_n}(x)]^T$.
@@ -87,11 +87,11 @@ $$
 
 Not all stationary points are minimizers. A stationary point may be a saddle point or even a maximizer! So, we need to add some other condition if we are to distinguish minimizers from other types of stationary points. The second order necessary condition gives us precisely this.
 
-**Theorem:** Suppose $f\in \mathcal{C}^{2} (\mathbb{R}^{n})$ and that $x^{*}$ is a local minimizer of $f$. Then, $\nabla^{2} f(x^{*})$ is <u>positive-semidefinite</u>.
+**Theorem:** Suppose $f\in \mathcal{C}^{2} (\mathbb{R}^{n})$ and that $$x^{*}$$ is a local minimizer of $f$. Then, $$\nabla^{2} f(x^{*})$$ is <u>positive-semidefinite</u>.
 
 We also have a second order sufficient condition:
 
-**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $x^{*} \in \mathbb{R}^n$ is such that $\nabla f(x^{*} ) = 0$ and $\nabla^2f(x^{*} )$ is <u>positive-definite</u>. Then, $x^{*} $ is surely a local minimizer of $f$.
+**Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $$x^{*} \in \mathbb{R}^n$$ is such that $$\nabla f(x^{*} ) = 0$$ and $$\nabla^2f(x^{*})$$ is <u>positive-definite</u>. Then, $$x^{*}$$ is surely a local minimizer of $f$.
 
 **An Aside:** Remember that $\nabla^2f(x)$ is a matrix, called the *Hessian*, defined as
 $$
