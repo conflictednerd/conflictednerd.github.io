@@ -213,7 +213,7 @@ This estimator has a much lower variance and even using $M=1$ would give us a go
 
 
 ### Summary
-As we saw ELBO, $\mathcal{L}_{i} (p_{\theta}, q_{\phi})$ gives a lower bound on the per-sample evidence, $p(x_{i})$.
+As we saw ELBO, $$\mathcal{L}_{i} (p_{\theta}, q_{\phi})$$ gives a lower bound on the per-sample evidence, $p(x_{i})$.
 We can write the ELBO in several different ways
 
 $$
