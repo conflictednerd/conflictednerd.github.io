@@ -127,7 +127,7 @@ $$
 
 Therefore $D_\mathrm{KL} (q_i(z) \| p(z \mid x_i))$ is actually the approximation error when we use $\mathcal{L}_i(p, q_i)$ instead of $\log p(x_i)$.
 
-This suggests a natural optimization scheme to push up the value of $p_\theta (x_i)$: we can alternate between maximizing $\mathcal{L}_i(p_\theta, q_i)$ w.r.t. $q_i$ to tighten the bound (which is equivalent to minimizing the KL), and maximizing $\mathcal{L}_i(p_\theta, q_i)$ w.r.t. $\theta$ to push up the lower bound.
+This suggests a natural optimization scheme to push up the value of $p_\theta (x_i)$: we can alternate between maximizing $\mathcal{L}_{i} (p_\theta, q_i)$ w.r.t. $q_i$ to tighten the bound (which is equivalent to minimizing the KL), and maximizing $\mathcal{L}_{i} (p_\theta, q_i)$ w.r.t. $\theta$ to push up the lower bound.
 
 <div class="text-center">
   <img src="/assets/img/blog/vi1.png" class="img-fluid" style="max-width: 70%;" />
@@ -135,14 +135,14 @@ This suggests a natural optimization scheme to push up the value of $p_\theta (x
 
 To sum it all up, take a look at the algorithm below.
 + for each $x_i$ (or minibatch)
-	+ calculate $\nabla_\theta\mathcal{L}_i(p, q_i)$ by
+	+ calculate $\nabla_\theta\mathcal{L}_{i} (p, q_i)$ by
 		+ sample $z \sim q_i$
-		+ let $\nabla_\theta \mathcal{L}_i(p, q_i) \approx \nabla_\theta \log p_\theta (x_i \mid z)$
+		+ let $\nabla_{\theta} \mathcal{L}_{i} (p, q_{i}) \approx \nabla_{\theta} \log p_{\theta} (x_i \mid z)$
 	+ let $\theta \leftarrow \theta + \alpha \nabla_\theta \mathcal{L}_i(p, q_i)$
 	+ update $q_i$ to tighten the bound by
 		+ let $q_i \leftarrow \arg \max_{q_i} \mathcal{L}_i(p, q_i)$
 
-This algorithm could have been fully practical if not for the last step. We have not specified how one should update $q_i$ to maximize $\mathrm{ELBO}$ (or to minimize the KL). In the special case when $q_i\sim\mathcal{N}(\mu_i, \sigma_i)$, we can analytically compute $\nabla_{\mu_i}\mathcal{L}_i(p, q_i)$ and $\nabla_{\sigma_i}\mathcal{L}_i(p, q_i)$ and use them to update parameters (here, mean and variance) of $q_i$ using gradient ascent. But even this requires us to store one set of parameters for each $q_i$, resulting in a total of $N\times(\mid \mu_z\mid  + \mid \sigma_z\mid )$. This means that the number of parameters grows with the size of the dataset, which is impractical. In the next section, we will maintain exactly how $q_i$'s should be updated and use amortized inference to manage the number of parameters.
+This algorithm could have been fully practical if not for the last step. We have not specified how one should update $q_i$ to maximize $\mathrm{ELBO}$ (or to minimize the KL). In the special case when $q_i \sim \mathcal{N} (\mu_{i}, \sigma_{i})$, we can analytically compute $\nabla_{\mu_{i}} \mathcal{L}_{i} (p, q_i)$ and $\nabla_{\sigma_{i}} \mathcal{L}_{i} (p, q_{i})$ and use them to update parameters (here, mean and variance) of $q_i$ using gradient ascent. But even this requires us to store one set of parameters for each $q_i$, resulting in a total of $N \times (\mid \mu_{z} \mid  + \mid \sigma_{z} \mid )$. This means that the number of parameters grows with the size of the dataset, which is impractical. In the next section, we will maintain exactly how $q_i$'s should be updated and use amortized inference to manage the number of parameters.
 #### Amortized VI
 The idea of amortized variational inference is to use a network parametrized by $\phi$ to represent the approximate posterior for all data points. This would break the dependence of the number of parameters to the size of the dataset. This network, denoted by $q_\phi(z\mid x)$ would take as input a data point $x$ and output the distribution $q_i(z)$. A common choice, used in VAEs is to have
 
@@ -202,17 +202,19 @@ $$
 This estimator has a much lower variance and even using $M=1$ would give us a good approximation of the gradient.
 
 > When using the reparameterization trick in the VAEs, the ELBO is usually written in the form of the reconstruction loss and a KL term (See the next section). With this formulation, the KL term, $D_\mathrm{KL}(q_\phi(z\mid x_i)\|p(z))$, would be the divergence between two Gaussians and would again have a closed form that we could differentiate. This would simplify $J(\phi)$ as $$J(\phi) = \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [\log p_\theta(x_i\mid \mu_\phi(x_i) + \varepsilon\sigma_\phi(x_i))].$$
+
+
 ### Summary
-As we saw ELBO, $\mathcal{L}_i(p_\theta, q_\phi)$ gives a lower bound on the per-sample evidence, $p(x_i)$.
+As we saw ELBO, $\mathcal{L}_{i} (p_{\theta}, q_{\phi})$ gives a lower bound on the per-sample evidence, $p(x_{i})$.
 We can write the ELBO in several different ways
 
 $$
 \begin{align*}
 \mathcal{L} &= \mathbb{E}_{z\sim q_\phi(z\mid x)} \left[\log\frac{p_\theta(x, z)}{q_\phi(z\mid x)}\right] \\
 &= \mathbb{E}_{z\sim q_\phi(z\mid x)} [\log p_\theta(x\mid z) + \log p(z)] + \mathcal{H}(q_\phi(z\mid x)) \\
-&= \log p_\theta(x) - D_\mathrm{KL}(q_\phi(z\mid x) \| p_\theta(z\mid x)) && \text{Evidence minus \textbf{posterior} KL} \\
+&= \log p_\theta(x) - D_\mathrm{KL}(q_\phi(z\mid x) \| p_\theta(z\mid x)) && \text{Evidence minus } \mathbf{posterior} \text{ KL} \\
 &= \mathbb{E}_{z \sim q_\phi(z\mid x)}[\log p_\theta(x, z)] + \mathcal{H}(q_\phi(z\mid x)) && \text{Avg negative energy plus entropy} \\
-&= \mathbb{E}_{z\sim q_\phi(z\mid x)}[\log p_\theta(x\mid z)] - D_\mathrm{KL}(q_\phi(z\mid x)\|p(z)) && \text{Avg reconstruction minus \textbf{prior} KL}
+&= \mathbb{E}_{z\sim q_\phi(z\mid x)}[\log p_\theta(x\mid z)] - D_\mathrm{KL}(q_\phi(z\mid x)\|p(z)) && \text{Avg reconstruction minus } \mathbf{\text{prior}} \text{ KL}
 \end{align*}
 $$
 

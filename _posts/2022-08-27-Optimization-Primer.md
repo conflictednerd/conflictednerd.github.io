@@ -33,10 +33,12 @@ Furthermore, the following assumptions commonly hold:
 + $f: \Omega \to \mathbb{R}$ is a smooth function,
 + The feasible set, $\Omega$, is defined by **finitely many** smooth constraints.
 
-The solution to this problem is a point $x^* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^* \in \Omega$ for which a neighborhood $\mathcal{N}(x^*, \delta)$ exists such that $f(x)\geqslant f(x^*)$ for all $x \in \Omega \cap \mathcal{N}(x^*, \delta)$.  
+The solution to this problem is a point $x^* \in \Omega$ in which $f$ attains its minimum value. We are sometimes also interested in *local minimizers*; these are points such as $x^* \in \Omega$ for which a neighborhood $\mathcal{N} (x^{*}, \delta)$ exists such that $f(x) \geqslant f(x^{*})$ for all $x \in \Omega \cap \mathcal{N}(x^{*}, \delta)$.  
 In the figure below, you can see the function $f$ (blue) is constrained to the closed interval between the red lines. You can see a local and global minimizer for $f$ in the feasible set.
 
-<img src="/assets/img/blog/optima.png" style="zoom:50%;" />
+<div class="text-center">
+  <img src="/assets/img/blog/optima.png" class="img-fluid" style="max-width: 70%;" />
+</div>
 
 ## Linear and Quadratic Optimization
 
@@ -62,7 +64,13 @@ Notice that in this section we are concerned with <u>unconstrained problems</u>.
 
 ### First Order Optimality Condition
 
-**Theorem:** Suppose $f \in \mathcal{C}^1(\mathbb{R}^n)$ (it's differentiable with a smooth derivative) and that $x^*$ is a local minimizer of $f$. Then, $x^*$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^*$ is zero.
+**Theorem:** Suppose
+$
+f \in
+\mathcal{C}
+^1(\mathbb{R}^n)
+$
+(it's differentiable with a smooth derivative) and that $x^*$ is a local minimizer of $f$. Then, $x^*$ is a stationary point for $f$, i.e., the gradient of $f$ at $x^*$ is zero.
 $$
 x^* \mathrm{\;is\;local\;minimizer\;of\;} f \implies \nabla f (x^*) = 0.
 $$
@@ -166,7 +174,9 @@ An algorithm that uses the Armijo condition will start with some large, initial 
 
 The figure below may be helpful to better understand this. Notice that $\Phi(\alpha)$ is the restricted version of $f$, $y_1(\alpha)$ is the tangent to it at zero, and $y_{0.6}(\alpha)$ is its the rotated version. Selecting any point at which $\Phi$ is below this line will result in a "sufficiently good" step size.
 
-<img src="/assets/img/blog/armijo.jpg" style="zoom:50%;" />
+<div class="text-center">
+  <img src="/assets/img/blog/armijo.jpg" class="img-fluid" style="max-width: 70%;" />
+</div>
 
 ### Steepest Descent
 
@@ -334,7 +344,9 @@ $$
 
 As we saw in the first chapter, solutions to an unconstrained optimization problem could be characterized in terms of derivatives. In particular, we saw that any minimizer has to be an stationary point for $f$. This is not necessarily the case in constrained optimization. A minimizer may be a boundary point (located on the boundary of the feasible regions) in which case it doesn't have to be an stationary point of $f$. The plot below shows an example of this where the global minimizer of the blue function within the region defined by the red lines is a boundary point with non-zero derivative.
 
-<img src="/assets/img/blog/optima.png" style="zoom:50%;" />
+<div class="text-center">
+  <img src="/assets/img/blog/optima.png" class="img-fluid" style="max-width: 70%;" />
+</div>
 
 The analogue of stationarity in constrained problems is the Karush-Kuhn-Tucker (KKT) conditions. KKT condition helps us characterize solutions in terms of derivatives.
 $$
@@ -405,7 +417,9 @@ We could use any method for solving the unconstrained optimization of $\Phi_\sig
 
 + As $\sigma$ approaches zero, $\Phi_\sigma$ becomes very steep in the direction of the constraint's gradients (See the figure below). As a result, the optimization of $\Phi_\sigma$ becomes ill-conditioned. This is something that we have to keep in mind when minimizing $\Phi_\sigma$. For instance, first order methods will probably not work well. Additionally, when we want to use trust-region methods, it's best if we scale the trust region to account for the ill-conditioning of the problem.
 
-  <img src="/assets/img/blog/penalty_fn.jpg" style="zoom:50%;" />
+<div class="text-center">
+  <img src="/assets/img/blog/penalty_fn.jpg" class="img-fluid" style="max-width: 70%;" />
+</div>
 
 + Other effective ways of combating the ill-conditioning is to use *change of variables* or *primal-dual variants*, where we compute explicit changes in both $x$ and constraint multipliers $\lambda$.
 
