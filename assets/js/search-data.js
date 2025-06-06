@@ -23,7 +23,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/publications/";
           },
-        },{id: "post-in-praise-of-einsum",
+        },{id: "post-variational-inference",
+        
+          title: "Variational Inference",
+        
+        description: "A note on variational inference and VAEs.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/Variational-Inference/";
+          
+        },
+      },{id: "post-in-praise-of-einsum",
         
           title: "In Praise of Einsum",
         
@@ -32,6 +43,39 @@ ninja.data = [{
         handler: () => {
           
             window.location.href = "/blog/2023/In-Praise-of-einsum/";
+          
+        },
+      },{id: "post-map-elites",
+        
+          title: "MAP-Elites",
+        
+        description: "An introductory note on the MAP-Elites algorithm.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/MAP-Elites/";
+          
+        },
+      },{id: "post-learning-to-score-behaviors",
+        
+          title: "Learning to Score Behaviors",
+        
+        description: "An extended summary of &quot;Learning to Score Behaviors for Guided Policy Optimization&quot;.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/Learning-to-Score-Behaviors/";
+          
+        },
+      },{id: "post-optimization-primer",
+        
+          title: "Optimization Primer",
+        
+        description: "An introduction to (non-convex) optimization.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/Optimization-Primer/";
           
         },
       },{id: "post-introduction-to-information-theory",
@@ -43,6 +87,17 @@ ninja.data = [{
         handler: () => {
           
             window.location.href = "/blog/2022/Introduction-to-Information-Theory/";
+          
+        },
+      },{id: "post-notes-on-stochastic-processes",
+        
+          title: "Notes on Stochastic Processes",
+        
+        description: "The notes I wrote for an undergrad stochastic processes course that I took.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/Notes-on-Stochastic-Processes/";
           
         },
       },{
