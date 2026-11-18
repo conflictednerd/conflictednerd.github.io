@@ -2,8 +2,8 @@
 layout: post
 title: Variational Inference
 date: 2023-03-07 01:19:15
-description: A note on variational inference and VAEs.
-tags: VI, VAE, Probability
+description: Variational inference and VAEs.
+tags: [VI, VAE, Probability]
 categories: blog
 related_posts: true
 toc: true

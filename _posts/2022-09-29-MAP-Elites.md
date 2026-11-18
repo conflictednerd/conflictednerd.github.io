@@ -2,8 +2,8 @@
 layout: post
 title: MAP-Elites
 date: 2022-09-29 12:47:40
-description: An introductory note on the MAP-Elites algorithm.
-tags: Optimization, Evolutionary, QD
+description: An introduction to the algorithm.
+tags: [Optimization, Evolutionary, QD]
 categories: blog
 related_posts: true
 toc: false

@@ -1,0 +1,67 @@
+---
+---
+{% comment %} One bibliography entry in the book-page design (used via `bibliography --template book-bib`). {% endcomment %}
+{%- assign n = entry.author_array | size -%}
+{%- assign href = entry.website | default: entry.html | default: entry.url -%}
+<article class="pub" id="p-{{ entry.key }}">
+  {%- if entry.preview %}
+    <figure class="mn fig">
+      <img
+        class="{{ entry.preview_class | default: 'diagram' }}"
+        src="{{ entry.preview | prepend: '/assets/img/publication_preview/' | relative_url }}"
+        alt="{{ entry.preview_alt | default: '' | escape }}"
+        loading="lazy"
+      >
+    </figure>
+  {%- elsif entry.annotation %}
+    <aside class="mn note">{{ entry.annotation }}</aside>
+  {%- endif %}
+  <span class="n">[{{ index }}]</span>
+  <h3>
+    {%- if href -%}
+      <a href="{{ href }}">{{ entry.title }}</a>
+    {%- else -%}
+      {{ entry.title }}
+    {%- endif -%}
+  </h3>
+  {% comment %} Authors as "A, B, and C." with the site owner in small caps; marks such as * stay outside the name. {% endcomment %}
+  <p class="by">
+    {%- for author in entry.author_array -%}
+      {%- assign last = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+      {%- assign mark = author.last | remove: last -%}
+      {%- assign is_self = false -%}
+      {%- if site.scholar.last_name contains last and site.scholar.first_name contains author.first -%}
+        {%- assign is_self = true -%}
+      {%- endif -%}
+      {%- unless forloop.first -%}
+        {%- if n > 2 -%},{%- endif %}
+        {% if forloop.last -%}and {% endif -%}
+      {%- endunless -%}
+      <span class="{% if is_self %}name{% else %}nw{% endif %}">
+        {{- author.first }}
+        {{ last -}}
+      </span>
+      {{- mark }}
+    {%- endfor -%}
+    .
+  </p>
+  <p class="in">
+    {{ entry.venue | default: entry.booktitle | default: entry.journal }}, {{ entry.year }}.
+    {%- if entry.preview and entry.annotation %} {{ entry.annotation }}{% endif %}
+  </p>
+  <p class="links">
+    {%- if entry.html -%}
+      <a href="{{ entry.html }}">
+        {%- if entry.html contains 'arxiv.org' %}arXiv{% else %}paper{% endif -%}
+      </a>
+    {%- elsif entry.pdf -%}
+      <a href="{{ entry.pdf }}">paper</a>
+    {%- endif -%}
+    {%- if entry.code -%}
+      <a href="{{ entry.code }}">code</a>
+    {%- endif -%}
+    {%- if entry.website -%}
+      <a href="{{ entry.website }}">website</a>
+    {%- endif -%}
+  </p>
+</article>

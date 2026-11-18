@@ -1,31 +1,19 @@
 ---
-layout: default
+layout: book
+prose: true
 ---
-{% if page._styles %}
-  <!-- Page/Post style -->
-  <style type="text/css">
-    {{ page._styles }}
-  </style>
-{% endif %}
-
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-description">{{ page.description }}</p>
+{% comment %} A plain page (privacy, 404): title, optional description, then the content in the text column. {% endcomment %}
+<main id="top">
+  <header class="title doc-head">
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}
+      <p class="dek">{{ page.description }}</p>
+    {% endif %}
   </header>
 
-  <article>
-    {{ content }}
-  </article>
-
-  {% if page.related_publications %}
-    <h2>References</h2>
-    <div class="publications">
-      {% bibliography --cited_in_order %}
+  <article class="sec" data-title="{{ page.title | escape }}">
+    <div class="body article">
+      {{ content }}
     </div>
-  {% endif %}
-
-  {% if site.giscus and page.giscus_comments %}
-    {% include giscus.liquid %}
-  {% endif %}
-</div>
+  </article>
+</main>

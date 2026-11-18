@@ -2,7 +2,7 @@
 layout: post
 title: In Praise of Einsum
 date: 2023-02-19 09:10:17
-description: A tutorial on einsum, Einstein summation notation.
+description: A tutorial on Einstein summation.
 tags: jax numpy machine-learning
 categories: blog
 related_posts: false

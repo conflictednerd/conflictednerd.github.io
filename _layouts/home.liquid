@@ -1,0 +1,98 @@
+---
+layout: book
+---
+<main id="top">
+  <div class="title">
+    {% if page.eyebrow %}
+      <p class="eyebrow sc">
+        {% for part in page.eyebrow -%}
+          <span class="nw">
+            {%- unless forloop.first %}· {% endunless -%}
+            {{- part -}}
+          </span>
+        {% endfor %}
+      </p>
+    {% endif %}
+    <h1>
+      {{ site.first_name }}
+      <em>{{ site.last_name }}</em>
+    </h1>
+  </div>
+
+  {% if site.data.plate %}
+    <div class="plate" id="plate"><canvas aria-hidden="true"></canvas></div>
+  {% endif %}
+
+  <section class="sec" id="about" data-no="1" data-title="About">
+    <h2><span class="no">§ 1</span>About</h2>
+    <div class="about">
+      <div class="prose lead">
+        {{ content }}
+        {% if page.interests %}
+          <p class="interests"><span class="sc">Research interests</span>{{ page.interests }}</p>
+        {% endif %}
+      </div>
+      <div class="side">
+        {% if page.portrait %}
+          <figure class="portrait">
+            <img src="{{ page.portrait | prepend: '/assets/img/' | relative_url }}" alt="{{ page.portrait_alt | escape }}" width="1280" height="1600">
+          </figure>
+        {% endif %}
+        {% if page.education %}
+          <aside class="note"><span class="sc">Education.</span>{{ page.education }}</aside>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="publications" data-no="2" data-title="Publications">
+    <h2><span class="no">§ 2</span>Publications</h2>
+    <div class="body pubs">{% bibliography --template book-bib --group_by none %}</div>
+  </section>
+
+  <section class="sec" id="notes" data-no="3" data-title="Notes">
+    <h2><span class="no">§ 3</span>Notes</h2>
+    <div class="body">
+      <aside class="mn note" id="toc-note">{{ site.blog_description }}</aside>
+      {% include book/notes.liquid %}
+    </div>
+  </section>
+
+  {% if site.data.service %}
+    <section class="sec" id="teaching" data-no="4" data-title="Teaching and Service">
+      <h2><span class="no">§ 4</span>Teaching and Service</h2>
+      <div class="body">
+        <dl class="cv-list">
+          {% for row in site.data.service %}
+            <dt>
+              {{ row.label }}
+              {% if row.when -%}
+                <span class="when">{{ row.when }}</span>
+              {%- endif %}
+            </dt>
+            <dd>
+              <p>{{ row.text }}</p>
+              {% if row.detail %}
+                <p>{{ row.detail }}</p>
+              {% endif %}
+              {% if row.busy_beaver %}
+                <figure class="bb">
+                  <button class="tape" id="bb-tape" type="button" aria-label="Restart the busy beaver machine"></button>
+                  <div class="rules" id="bb-rules" aria-hidden="true"></div>
+                  <figcaption><span class="sc">The 4-state busy beaver.</span><span id="bb-status">State A, step 0 of 107.</span></figcaption>
+                </figure>
+              {% endif %}
+            </dd>
+          {% endfor %}
+        </dl>
+      </div>
+    </section>
+  {% endif %}
+</main>
+
+{% if site.data.plate %}
+  <script type="application/json" id="papers-data">
+    {{ site.data.plate | jsonify }}
+  </script>
+  <script defer src="{{ '/assets/book/plate.js' | relative_url | bust_file_cache }}"></script>
+{% endif %}

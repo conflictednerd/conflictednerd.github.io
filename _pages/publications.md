@@ -1,20 +1,17 @@
 ---
-layout: page
+layout: book
+prose: true
 permalink: /publications/
 title: Publications
 description: publications in reversed chronological order
-nav: true
-nav_order: 2
 ---
 
-<!-- _pages/publications.md -->
+<main id="top">
+  <header class="title doc-head">
+    <h1>{{ page.title }}</h1>
+  </header>
 
-<!-- Bibsearch Feature -->
-
-{% include bib_search.liquid %}
-
-<div class="publications">
-
-{% bibliography %}
-
-</div>
+  <section class="sec" id="publications" data-title="{{ page.title }}">
+    <div class="body pubs">{% bibliography --template book-bib --group_by none %}</div>
+  </section>
+</main>

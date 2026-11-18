@@ -1,0 +1,19 @@
+<header class="head" id="head">
+  <a class="who sc" href="{{ '/' | relative_url }}">
+    {{- site.first_name }}
+    {{ site.last_name -}}
+  </a>
+  <span class="where" id="where" aria-hidden="true"><b></b><span></span></span>
+  <nav class="rh-nav" aria-label="Sections">
+    <a href="{{ '/#publications' | relative_url }}">Publications</a>
+    <a href="{{ '/#notes' | relative_url }}">Notes</a>
+    <a href="{{ '/#teaching' | relative_url }}">Teaching</a>
+    <button class="theme" id="theme" type="button" aria-label="Switch to the dark theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="10" cy="10" r="7.4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M10 2.6a7.4 7.4 0 0 1 0 14.8z" fill="currentColor"/>
+      </svg>
+    </button>
+  </nav>
+  <span class="rh-progress" aria-hidden="true"></span>
+</header>

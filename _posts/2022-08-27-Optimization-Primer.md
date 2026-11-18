@@ -2,8 +2,8 @@
 layout: post
 title: Optimization Primer
 date: 2022-08-27 01:54:49
-description: An introduction to (non-convex) optimization.
-tags: Optimization, Numerical-analysis
+description: An introduction to non-convex optimization.
+tags: [Optimization, Numerical-analysis]
 categories: blog
 related_posts: true
 toc: true

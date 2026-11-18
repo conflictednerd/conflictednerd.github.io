@@ -1,0 +1,24 @@
+{% assign s = site.data.socials %}
+<footer class="colophon" id="contact">
+  <p class="mail">
+    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+  </p>
+  <nav aria-label="Elsewhere">
+    {% if s.scholar_userid -%}
+      <a href="https://scholar.google.com/citations?user={{ s.scholar_userid }}">Scholar</a>
+    {%- endif %}
+    {% if s.github_username -%}
+      <a href="https://github.com/{{ s.github_username }}">GitHub</a>
+    {%- endif %}
+    {% if s.linkedin_username -%}
+      <a href="https://www.linkedin.com/in/{{ s.linkedin_username }}">LinkedIn</a>
+    {%- endif %}
+    {% if s.x_username -%}
+      <a href="https://x.com/{{ s.x_username }}">X</a>
+    {%- endif %}
+    {% if s.letterboxd_username -%}
+      <a href="https://letterboxd.com/{{ s.letterboxd_username }}/">Letterboxd</a>
+    {%- endif %}
+  </nav>
+  <p class="fine-print">Thomas Lord Department of Computer Science, University of Southern California, Los Angeles.</p>
+</footer>

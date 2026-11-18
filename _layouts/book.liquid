@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>
+      {%- if page.url == '/' or page.title == blank -%}
+        {{ site.title }}
+      {%- else -%}
+        {{ page.title | strip_html }} · {{ site.title }}
+      {%- endif -%}
+    </title>
+    <meta name="description" content="{{ page.description | default: site.description | strip_html | strip_newlines | strip | escape }}">
+    <meta name="author" content="{{ site.first_name }} {{ site.last_name }}">
+    <meta name="color-scheme" content="light dark">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <link rel="icon" href="{{ site.icon | prepend: '/assets/img/' | relative_url }}">
+    {% feed_meta %}
+    {% if page.redirect %}
+      <meta http-equiv="refresh" content="3; url={{ '/' | relative_url }}">
+    {% endif %}
+    <script>
+      /* apply a saved theme before anything paints */
+      (function () {
+        try {
+          var s = localStorage.getItem('theme');
+          if (s === 'dark' || s === 'light') document.documentElement.setAttribute('data-theme', s);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400..600&display=swap">
+    <link rel="stylesheet" href="{{ '/assets/book/book.css' | relative_url | bust_file_cache }}">
+    {% if layout.prose or page.prose %}
+      <link rel="stylesheet" href="{{ '/assets/book/prose.css' | relative_url | bust_file_cache }}">
+    {% endif %}
+    {% if site.enable_math and page.math %}
+      <script>
+        window.MathJax = {
+          tex: {
+            tags: 'ams',
+            inlineMath: [
+              ['$', '$'],
+              ['\\(', '\\)'],
+            ],
+          },
+          chtml: { scale: 0.94 },
+        };
+      </script>
+      <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    {% endif %}
+    {% if site.enable_google_analytics and site.google_analytics and jekyll.environment == 'production' %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics }}');
+      </script>
+    {% endif %}
+  </head>
+  <body>
+    <div class="page">
+      {% include book/running-head.liquid %}
+      {{ content }}
+      {% include book/colophon.liquid %}
+    </div>
+    <script defer src="{{ '/assets/book/book.js' | relative_url | bust_file_cache }}"></script>
+  </body>
+</html>

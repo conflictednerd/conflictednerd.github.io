@@ -2,8 +2,8 @@
 layout: post
 title: Learning to Score Behaviors
 date: 2022-09-21 14:52:46
-description: An extended summary of "Learning to Score Behaviors for Guided Policy Optimization".
-tags: RL, paper-summary
+description: A summary of the paper.
+tags: [RL, paper-summary]
 categories: blog
 related_posts: true
 toc: true

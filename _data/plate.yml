@@ -1,0 +1,36 @@
+# Peaks of the landscape on the home page (Plate I), one per paper.
+#   key     BibTeX key of the paper in _bibliography/papers.bib
+#   short   label shown on the peak
+#   date    "YYYY-MM"; newer papers stand taller (height halves every 24 months behind the newest)
+#   weight  0 to 1, scales that height down for papers that should draw less attention
+#   x, y    position on the disc, each roughly between -0.7 and 0.7
+- key: hedayatian2026reppo
+  short: RePPO
+  date: "2026-10"
+  weight: 1
+  x: 0.20
+  y: 0.30
+- key: hedayatian2026soft
+  short: Soft QD
+  date: "2026-04"
+  weight: 1
+  x: -0.40
+  y: -0.12
+- key: hedayatian2026autoqd
+  short: AutoQD
+  date: "2026-04"
+  weight: 1
+  x: 0.30
+  y: -0.42
+- key: hedayatian2026interplay
+  short: ToM & ZSC
+  date: "2026-01"
+  weight: 0.35
+  x: -0.30
+  y: 0.56
+- key: rohani2022bimrl
+  short: BIMRL
+  date: "2022-10"
+  weight: 1
+  x: 0.70
+  y: 0.04

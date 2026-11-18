@@ -1,0 +1,16 @@
+{% comment %} A list of notes (blog posts), set like a table of contents. Pass `posts=` to list something other than all posts. {% endcomment %}
+{% assign notes = include.posts | default: site.posts %}
+<nav class="toc" id="toc" aria-label="Notes">
+  {% for post in notes %}
+    <a href="{{ post.url | relative_url }}">
+      <span class="row">
+        <span class="t">{{ post.title }}</span>
+        <span class="dots" aria-hidden="true"></span>
+        <span class="date sc">{{ post.date | date: '%b %Y' }}</span>
+      </span>
+      {% if post.description -%}
+        <span class="d">{{ post.description }}</span>
+      {%- endif %}
+    </a>
+  {% endfor %}
+</nav>

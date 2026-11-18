@@ -1,96 +1,51 @@
 ---
-layout: default
+layout: book
+prose: true
 ---
+{% comment %} A note (blog post): head, text column with an optional contents list in the margin, and links to the neighbouring notes. {% endcomment %}
 {% assign year = page.date | date: '%Y' %}
-{% assign tags = page.tags | join: '' %}
-{% assign categories = page.categories | join: '' %}
-{% assign url_beginning = page.url | slice: 0, 6 %}
-
-{% if page._styles %}
-  <!-- Page/Post style -->
-  <style type="text/css">
-    {{ page._styles }}
-  </style>
-{% endif %}
-
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">
-      Created on {{ page.date | date: '%B %d, %Y' }}
-      {% if page.author %}by {{ page.author }}{% endif %}
-      {% if page.last_updated %}, last updated on {{ page.last_updated | date: '%B %d, %Y' }}{% endif %}
-      {% if page.meta %}• {{ page.meta }}{% endif %}
+<main id="top">
+  <header class="title doc-head">
+    <p class="eyebrow sc">
+      {{ page.date | date: '%-d %B' }}
+      <a href="{{ '/blog/' | append: year | append: '/' | relative_url }}">{{ year }}</a>
     </p>
-    <p class="post-tags">
-      {% if url_beginning == '/blog/' %}
-        <a href="{{ year | prepend: '/blog/' | relative_url }}"> <i class="fa-solid fa-calendar fa-sm"></i> {{ year }} </a>
-      {% else %}
-        <i class="fa-solid fa-calendar fa-sm"></i> {{ year }}
-      {% endif %}
-      {% if tags != '' %}
-        &nbsp; &middot; &nbsp;
-        {% for tag in page.tags %}
-          {% if url_beginning == '/blog/' %}
-            <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}"> <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}</a>
-          {% else %}
-            <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}
-          {% endif %}
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-
-      {% if categories != '' %}
-        &nbsp; &middot; &nbsp;
-        {% for category in page.categories %}
-          {% if url_beginning == '/blog/' %}
-            <a href="{{ category | slugify | prepend: '/blog/category/' | relative_url }}"> <i class="fa-solid fa-tag fa-sm"></i> {{ category -}}</a>
-          {% else %}
-            <i class="fa-solid fa-tag fa-sm"></i> {{ category }}
-          {% endif %}
-          {% unless forloop.last %}
-            &nbsp;
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}
+      <p class="dek">{{ page.description }}</p>
+    {% endif %}
+    <p class="filed">
+      {% for tag in page.tags %}
+        <a href="{{ tag | slugify | prepend: '/blog/tag/' | append: '/' | relative_url }}">{{ tag | replace: '-', ' ' }}</a>
+      {% endfor %}
+      {% for category in page.categories %}
+        <a href="{{ category | slugify | prepend: '/blog/category/' | append: '/' | relative_url }}">{{ category | replace: '-', ' ' }}</a>
+      {% endfor %}
     </p>
   </header>
 
-  <article class="post-content">
-    {% if page.toc and page.toc.beginning %}
-      <div id="table-of-contents">
-        {% toc %}
+  {% comment %} data-title: the running head shows the note's title once this element scrolls under it. {% endcomment %}
+  <article class="sec" data-title="{{ page.title | escape }}">
+    <div class="body">
+      {% if page.toc %}
+        <nav class="mn note doc-toc" aria-label="Contents">
+          <span class="sc">Contents</span>
+          {{ content | toc_only }}
+        </nav>
+      {% endif %}
+      <div class="article">
+        {{ content }}
       </div>
-      <hr>
-    {% endif %}
-    <div id="markdown-content">
-      {{ content }}
     </div>
   </article>
 
-  {% if page.citation %}
-    {% include citation.liquid %}
-  {% endif %}
-
-  {% if page.related_publications %}
-    <h2>References</h2>
-    <div class="publications">
-      {% bibliography --group_by none --cited_in_order %}
-    </div>
-  {% endif %}
-
-  {% if site.related_blog_posts and site.related_blog_posts.enabled %}
-    {% if page.related_posts == null or page.related_posts %}
-      {% include related_posts.liquid %}
+  <nav class="doc-end" aria-label="More notes">
+    {% if page.previous %}
+      <a class="prev" href="{{ page.previous.url | relative_url }}"><span class="sc">Previous</span> {{ page.previous.title }}</a>
     {% endif %}
-  {% endif %}
-
-  {% if site.disqus_shortname and page.disqus_comments %}
-    {% include disqus.liquid %}
-  {% endif %}
-  {% if site.giscus and page.giscus_comments %}
-    {% include giscus.liquid %}
-  {% endif %}
-</div>
+    {% if page.next %}
+      <a class="next" href="{{ page.next.url | relative_url }}"><span class="sc">Next</span> {{ page.next.title }}</a>
+    {% endif %}
+    <a class="all" href="{{ '/blog/' | relative_url }}">All notes</a>
+  </nav>
+</main>

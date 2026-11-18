@@ -2,8 +2,8 @@
 layout: post
 title: Notes on Stochastic Processes
 date: 2022-07-22 23:57:17
-description: The notes I wrote for an undergrad stochastic processes course that I took.
-tags: Stochastic-Processes, Markov-Chains, Probability, MCMC
+description: Notes from an undergraduate course.
+tags: [Stochastic-Processes, Markov-Chains, Probability, MCMC]
 categories: blog
 related_posts: true
 toc: false

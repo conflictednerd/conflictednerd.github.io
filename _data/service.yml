@@ -1,0 +1,17 @@
+# Rows of the "Teaching and Service" section on the home page.
+#   label   small-caps label on the left;  when  optional dates under it
+#   text    main line;  detail  optional second line
+#   busy_beaver: true  puts the running 4-state busy beaver beside that row
+- label: Reviewing
+  text: NeurIPS and ICLR.
+- label: Teaching assistant
+  when: Fall 2020 – Fall 2025
+  text: USC and Sharif University of Technology.
+  detail: Courses in algorithms, theory of computing, discrete mathematics, AI, NLP, automata theory, and image processing.
+- label: Guest lecture
+  text: The Busy Beaver function and the limits of computability.
+  busy_beaver: true
+- label: Olympiad instructor
+  when: 2018 – 2019
+  text: Mathematics, Comma Institute for High School Students, Tehran.
+  detail: Combinatorics, graph theory, and algorithms for olympiad-track students.

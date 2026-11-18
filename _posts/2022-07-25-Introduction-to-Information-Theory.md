@@ -2,7 +2,7 @@
 layout: post
 title: Introduction to Information Theory
 date: 2022-07-25 20:22:16
-description: A brief introduction to information theory, definitions and basic theorems.
+description: Definitions and basic theorems.
 tags: information-theory entropy divergence
 categories: blog
 related_posts: true
