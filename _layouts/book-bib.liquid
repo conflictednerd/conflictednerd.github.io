@@ -27,7 +27,7 @@
   {% comment %} Authors as "A, B, and C." with the site owner in small caps; marks such as * stay outside the name. {% endcomment %}
   <p class="by">
     {%- for author in entry.author_array -%}
-      {%- assign last = author.last | regex_replace: '[*∗†‡§¶‖&^]', '' -%}
+      {%- assign last = author.last | remove: '*' -%}
       {%- assign mark = author.last | remove: last -%}
       {%- assign is_self = false -%}
       {%- if site.scholar.last_name contains last and site.scholar.first_name contains author.first -%}
