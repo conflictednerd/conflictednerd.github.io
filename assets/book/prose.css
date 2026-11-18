@@ -1,0 +1,250 @@
+/* Inner pages (notes, archives, plain pages), built on the tokens in book.css. */
+
+/* Tokens: a code font, one syntax colour, and how figures blend with the paper */
+:root {
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --code-str: #3b6447;
+  --fig-blend: multiply;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --code-str: #a9c39e;
+    --fig-blend: normal;
+  }
+}
+:root[data-theme="dark"] {
+  --code-str: #a9c39e;
+  --fig-blend: normal;
+}
+
+/* Page head: date, title, description and tags */
+.doc-head h1 {
+  font-size: clamp(38px, 6vw, 66px);
+  line-height: 1.04;
+}
+.doc-head .eyebrow a {
+  text-decoration: none;
+}
+.doc-head .dek {
+  margin-top: 0.5em;
+  font-style: italic;
+  font-size: 1.15em;
+  line-height: 1.35;
+  color: var(--mute);
+}
+.doc-head .filed {
+  margin-top: 0.8em;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.09em;
+  font-size: 0.88em;
+  color: var(--mute);
+}
+.doc-head .filed a {
+  margin-right: 1.2em;
+  text-decoration: none;
+}
+
+/* Contents: a plain list in the margin, sticky on wide screens and placed before the text on narrow ones */
+.doc-toc {
+  position: sticky;
+  top: calc(var(--head) + 24px);
+}
+.doc-toc .sc {
+  display: block;
+  margin-bottom: 6px;
+}
+.doc-toc ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.doc-toc ul ul {
+  padding-left: 1em;
+}
+.doc-toc ul ul ul {
+  display: none;
+}
+.doc-toc a {
+  display: block;
+  padding: 2px 0;
+  font-style: normal;
+  text-decoration: none;
+}
+.doc-toc ul ul a {
+  font-style: italic;
+}
+@media (max-width: 880px) {
+  .doc-toc {
+    position: static;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* Text: even spacing between blocks; a long inline equation scrolls inside its paragraph instead of widening the page */
+.article > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.article > * + * {
+  margin-top: 0.9em;
+}
+.article strong {
+  font-weight: 600;
+}
+.article p,
+.article ul,
+.article ol {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Headings: h1 opens a part (one note uses it), h2 a section, h3 a subsection, h4 a run of paragraphs */
+.article h1,
+.article h2,
+.article h3,
+.article h4 {
+  margin-top: 1.8em;
+  font-weight: 400;
+  line-height: 1.2;
+  scroll-margin-top: calc(var(--head) + 20px);
+}
+.article h1 {
+  margin-top: 2.2em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--rule);
+  font-size: 1.6em;
+}
+.article h2 {
+  font-style: italic;
+  font-size: 1.36em;
+}
+.article h3 {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1.1em;
+}
+.article h4 {
+  margin-top: 1.4em;
+  font-style: italic;
+  font-size: 1.04em;
+}
+.article :is(h1, h2, h3, h4) + * {
+  margin-top: 0.45em;
+}
+.article > :first-child {
+  margin-top: 0;
+}
+
+/* Lists */
+.article ul,
+.article ol {
+  padding-left: 1.3em;
+}
+.article li + li,
+.article li > ul,
+.article li > ol {
+  margin-top: 0.35em;
+}
+.article li::marker {
+  color: var(--mute);
+}
+
+/* Quotations */
+.article blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1.1em;
+  border-left: 1px solid var(--rule);
+}
+
+/* Code: inline and in blocks */
+.article code {
+  padding: 0.1em 0.3em;
+  font-family: var(--mono);
+  font-size: 0.78em;
+  background: var(--wash);
+  border-radius: 2px;
+}
+.article pre {
+  margin: 0;
+  padding: 0.9em 1.1em;
+  font-family: var(--mono);
+  font-size: 0.74em;
+  line-height: 1.6;
+  background: var(--wash);
+  border-radius: 2px;
+  overflow-x: auto;
+}
+.article pre code {
+  padding: 0;
+  font-size: inherit;
+  background: none;
+}
+
+/* Syntax colours (Rouge token classes): comments, keywords, strings and numbers */
+.article .highlight :is(.c, .c1, .cm) {
+  font-style: italic;
+  color: var(--mute);
+}
+.article .highlight :is(.k, .kd, .kn, .ow) {
+  color: var(--rubric);
+}
+.article .highlight :is(.s, .s1, .s2, .mi, .mf) {
+  color: var(--code-str);
+}
+
+/* Figures: centred; their white backgrounds take the paper colour in light mode and are inverted in dark mode */
+.article img {
+  display: block;
+  margin: 0 auto;
+  mix-blend-mode: var(--fig-blend);
+  filter: var(--diagram-filter);
+}
+
+/* Two plots set side by side with an inline zoom (Optimization Primer) */
+.article p:has(> img + img) {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+.article img[style*="zoom"] {
+  zoom: 1 !important;
+  flex: 1;
+  min-width: 0;
+  max-width: 330px;
+}
+
+/* The one red span (Learning to Score Behaviors) takes the accent colour */
+.article [style*="color:red"] {
+  color: var(--rubric) !important;
+}
+
+/* Display equations scroll sideways instead of widening the page */
+.article mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* End of a note: previous, next, all notes */
+.doc-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 40px;
+  margin-top: 64px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-style: italic;
+}
+.doc-end a {
+  text-decoration: none;
+}
+.doc-end .sc {
+  margin-right: 0.4em;
+  font-style: normal;
+  color: var(--rubric);
+}
+.doc-end .all {
+  margin-left: auto;
+}
