@@ -67,7 +67,7 @@ $$
 
 + Another way of thinking about it is as *a measure of how similar samples of $p$ are to those of $q$*.
 
-+ If there is a symbol $x \in \mathcal{X}$ that may be seen when we sample from $p$, but will never appear when sampling from $q$ (i.e., $p(x)>0 = q(x)$), then the distance $D(p\|q)$ is $\infty$. This is because there is a chance that, when sampling from $p$, we observe $x$, and immediately recognize that we are not sampling from $q$. Note however, that $D(q\|p)$ may not be $\infty$, as not observing $x$ can not assure us that we are sampling form $p$.
++ If there is a symbol $x \in \mathcal{X}$ that may be seen when we sample from $p$, but will never appear when sampling from $q$ (i.e., $p(x)>0 = q(x)$), then the distance $D(p\\|q)$ is $\infty$. This is because there is a chance that, when sampling from $p$, we observe $x$, and immediately recognize that we are not sampling from $q$. Note however, that $D(q\\|p)$ may not be $\infty$, as not observing $x$ can not assure us that we are sampling form $p$.
 
 The **mutual information** $I(X; Y)$ between two random variables is the KL-divergence between their joint distribution, $p(x, y)$ and the product of their marginals, $p(x)p(y)$:
 
@@ -176,7 +176,7 @@ Notice how the left hand side is similar to the definition of KL-divergence!
 
 Now, let's see some consequences of the application of these inequalities:
 
-+ KL-divergence is non-negative: $D(p\|q)\geqslant 0$ with equality only when $p=q$.
++ KL-divergence is non-negative: $D(p\\|q)\geqslant 0$ with equality only when $p=q$.
 
 + Mutual information and conditional mutual information are both non-negative: $I(X; Y\mid Z)\geqslant 0$ with equality only when $X$ and $Y$ are conditionally independent given $Z$.
 
@@ -192,7 +192,7 @@ Now, let's see some consequences of the application of these inequalities:
 
   with equality if and only if $X_i$'s are independent.
 
-+ (*Convexity of KL-divergence*) $D(p\|q)$ is convex in the pair $(p, q)$; that is, for any two pairs of distributions $(p_1, q_1)$ and $(p_2, q_2)$ and any $\lambda \in [0, 1]$,
++ (*Convexity of KL-divergence*) $D(p\\|q)$ is convex in the pair $(p, q)$; that is, for any two pairs of distributions $(p_1, q_1)$ and $(p_2, q_2)$ and any $\lambda \in [0, 1]$,
 
   $$
   D(\lambda p_1 +(1-\lambda)p_2 \| \lambda q_1 + (1-\lambda)q_2) \leqslant \lambda D(p_1\|q_1) + (1-\lambda) D(p_2\|q_2).

@@ -102,7 +102,7 @@ $$
 
 for $\mathbf{z} \in \mathbb{R}^d$, where $\mathbf{G} \in \mathbb{R}^{m\times d}$ is a Gaussian with iid entries taken from $$\mathcal{N}(0, 1)$$ and $\mathbf{b} \in \mathbb{R}^m$ has iid entries taken from $\mathrm{Uniform}(0, 2\pi)$. The $\cos$ function is applies elementwise.
 
-From hereon, the optimization of $\Psi$ over $\lambda$ is synonymous with optimization over $\mathbf{p}^\lambda$. Having said these, we can optimize $\Psi$ by running SGD to find the optimal vectors $\mathbf{p}^{\lambda_\mu}, \mathbf{p}^{\lambda_\nu}$. Given kernels $$\kappa, \mathscr{l}$$ and a fresh sample $$(x_t, y_t) \sim \mu \otimes \nu$$, the SGD step w.r.t. the current iterates $\mathbf{p}_{t-1}^\mu, \mathbf{p}_{t-1}^\nu$ satisfies:
+From hereon, the optimization of $\Psi$ over $\lambda$ is synonymous with optimization over $\mathbf{p}^\lambda$. Having said these, we can optimize $\Psi$ by running SGD to find the optimal vectors $\mathbf{p}^{\lambda_\mu}, \mathbf{p}^{\lambda_\nu}$. Given kernels $$\kappa, \mathscr{l}$$ and a fresh sample $$(x_t, y_t) \sim \mu \otimes \nu$$, the SGD step w.r.t. the current iterates $\mathbf{p}\_{t-1}^\mu, \mathbf{p}\_{t-1}^\nu$ satisfies:
 
 $$
 F(\mathbf{p}_1, \mathbf{p}_2, x, y) = \exp \left(\frac{\mathbf{p}_1^T \phi_\kappa(x) - \mathbf{p}_2^T \phi_\mathscr{l}(y) - C(x, y)}{\gamma}\right), \\\\

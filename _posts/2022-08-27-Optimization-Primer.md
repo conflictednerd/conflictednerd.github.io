@@ -140,7 +140,7 @@ Generic Method(GM):
 
 Now by filling in the gaps we can get different algorithms.
 
-1. **Termination Criteria:** The most often used stopping condition is to check if the gradient has become too small, i.e., $\|\nabla f(x_k)\|<\epsilon$ along with the decreasing property, i.e., $f(x_{k+1}) < f(x_k)$. But we can also use some more complicated eigenvalue-based criteria as well. In most cases though, we just check the norm of the gradient.
+1. **Termination Criteria:** The most often used stopping condition is to check if the gradient has become too small, i.e., $\\|\nabla f(x_k)\\|<\epsilon$ along with the decreasing property, i.e., $f(x_{k+1}) < f(x_k)$. But we can also use some more complicated eigenvalue-based criteria as well. In most cases though, we just check the norm of the gradient.
 2. **Computing The Change Vector:** This is where the most variation in algorithms can be seen. How are we to find a vector $v$  following which allows us to further minimize the value of $f$? There are different approaches to finding this vector (line-search, trust region) that will be discussed below. But, at the heart of all these methods is a simple idea: we can use a simple, local model $m_k$ to approximate $f$ around $x_k$, and then try to minimize $m_k$. When we have access to derivatives, we can choose $m_k$ to be a _linear_ or _quadratic_ function based on the Taylor expansion of $f$. Of course this approximation will not work great if we move too far away from $x_k$, so we have to take that into consideration when computing $v$.
 
 Before presenting any concrete algorithms, it is useful to mention some desirable properties that we would like to have in an iterative algorithm. Ideally, we want to our algorithm to **converge globally**, meaning that the algorithm converges and terminates, regardless of the starting point (not to be confused with convergence to global minima!). If that is not possible, we would like to have some **local convergence** guarantee, meaning that the algorithm converges to a local minimizer or stationary point when we start sufficiently close to one. One final consideration is the **speed of convergence**. We would like to have algorithms that not only converge, but do so quickly!
@@ -223,7 +223,7 @@ $$
 m_k(s) = f(x_k) + \nabla f(x_k)^T s.
 $$
 
-Now, if we want to minimize this function (subject to $\|s\| = \|\nabla f(x_k)\|$ to bound the values from below), we should let $s=-\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.
+Now, if we want to minimize this function (subject to $\\|s\\| = \\|\nabla f(x_k)\\|$ to bound the values from below), we should let $s=-\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.
 
 The idea behind Newton's method is to use a second order approximation to $f$. Suppose $B_k$ is a symmetric positive-definite matrix and that we choose to locally approximate $f$ by
 
@@ -281,7 +281,7 @@ At the $k$-th step, line-search methods locally approximate the non-convex objec
 
 Once we have this model $m_k$, we use it to find a descent direction, $s_k$. This direction is found by minimizing the model, $m_k$. In the case of a linear model, this direction is $-\nabla f(x_k)$ and in the case of the quadratic model it is the solution to $B_ks_k = -\nabla f(x_k)$. Notice two important points:
 
-+ When we use a linear model, $m_k$ is not bounded from below. Therefore, we can't minimize it. To address this issue, we actually solve the constrained optimization $\min_{s}m_k(s)$ subject to $\|s\|<\nabla f(x_k)$.
++ When we use a linear model, $m_k$ is not bounded from below. Therefore, we can't minimize it. To address this issue, we actually solve the constrained optimization $\min_{s}m_k(s)$ subject to $\\|s\\|<\nabla f(x_k)$.
 + When we use a quadratic model, $m_k$ is not bounded from below unless it is a convex, which is the case if and only if $B_k$ is positive-definite. So, when $B_k$ is not positive-definite, we perturb it. In essence, we locally approximate $f$ with a convex quadratic, even if $f$ is not locally convex. This means that our model may no longer be the most accurate local approximation.
 
 Finally, when we have a descent direction we need to find a suitable step size $\alpha_k$ so that taking a step of this size in the descent direction results in a "sufficient decrease" in the value of $f$. To find this step size we use either exact line search or Armijo-like conditions. 

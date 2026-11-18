@@ -109,10 +109,10 @@ $$
 \log p(x_i) \geqslant \mathcal{L}_i(p, q_i).
 $$
 
-This result, in itself, lets us use any distribution $q_i(z)$ to get a tractable lower bound for $\log p(x_i)$. But how tight is this bound? and how should we choose $q_i$? The basic intuition is that $q_i(z)$ should approximate the posterior $p(z\mid x_i)$, in the sense of KL-divergence. So, the ideal $q_i$ would minimize $D_\mathrm{KL} (q_i(z)\| p(z\mid x_i))$. This intuition will be made rigorous in the next section, where we take a different approach to derive ELBO.
+This result, in itself, lets us use any distribution $q_i(z)$ to get a tractable lower bound for $\log p(x_i)$. But how tight is this bound? and how should we choose $q_i$? The basic intuition is that $q_i(z)$ should approximate the posterior $p(z\mid x_i)$, in the sense of KL-divergence. So, the ideal $q_i$ would minimize $D_\mathrm{KL} (q_i(z)\\| p(z\mid x_i))$. This intuition will be made rigorous in the next section, where we take a different approach to derive ELBO.
 
 #### Approach 2: KL minimization
-Following the intuition given above, let's examine $D_\mathrm{KL} (q_i(z)\|p(z\mid x_i))$ more closely.
+Following the intuition given above, let's examine $D_\mathrm{KL} (q_i(z)\\|p(z\mid x_i))$ more closely.
 
 $$
 \begin{align*}
@@ -125,7 +125,7 @@ D_\mathrm{KL} (q_i(z)\|p(z\mid x_i)) &= \mathbb{E}_{z\sim q_i}\left[\log\frac{q_
 \end{align*}
 $$
 
-Therefore $D_\mathrm{KL} (q_i(z) \| p(z \mid x_i))$ is actually the approximation error when we use $\mathcal{L}_i(p, q_i)$ instead of $\log p(x_i)$.
+Therefore $D_\mathrm{KL} (q_i(z) \\| p(z \mid x_i))$ is actually the approximation error when we use $\mathcal{L}_i(p, q_i)$ instead of $\log p(x_i)$.
 
 This suggests a natural optimization scheme to push up the value of $p_\theta (x_i)$: we can alternate between maximizing 
 
@@ -218,7 +218,7 @@ $$
 
 This estimator has a much lower variance and even using $M=1$ would give us a good approximation of the gradient.
 
-> When using the reparameterization trick in the VAEs, the ELBO is usually written in the form of the reconstruction loss and a KL term (See the next section). With this formulation, the KL term, $D_\mathrm{KL}(q_\phi(z\mid x_i)\|p(z))$, would be the divergence between two Gaussians and would again have a closed form that we could differentiate. This would simplify $J(\phi)$ as $$J(\phi) = \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [\log p_\theta(x_i\mid \mu_\phi(x_i) + \varepsilon\sigma_\phi(x_i))].$$
+> When using the reparameterization trick in the VAEs, the ELBO is usually written in the form of the reconstruction loss and a KL term (See the next section). With this formulation, the KL term, $D_\mathrm{KL}(q_\phi(z\mid x_i)\\|p(z))$, would be the divergence between two Gaussians and would again have a closed form that we could differentiate. This would simplify $J(\phi)$ as $$J(\phi) = \mathbb{E}_{\varepsilon \sim \mathcal{N}(0, 1)} [\log p_\theta(x_i\mid \mu_\phi(x_i) + \varepsilon\sigma_\phi(x_i))].$$
 
 
 ### Summary
