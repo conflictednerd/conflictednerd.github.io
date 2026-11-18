@@ -18,6 +18,7 @@ Some of the notes I wrote when I took an information theory course. It contains 
 Let $X$ be a discrete random variable with alphabet $\mathcal{X}$ and probability mass function $p(x)$.
 
 The **entropy** $H(X)$ of a discrete random variable $X$ is defined by
+
 $$
 H(X) = -\mathbb{E}_{X\sim p(x)}\left[\log p(X)\right] = - \sum_{x\in\mathcal{X}}p(x)\log p(x).
 $$
@@ -128,9 +129,11 @@ I(X_1,\cdots,X_n; Y) = \sum_{i=1}^{n}I(X_i;Y\mid X_1,\cdots, X_{i-1}),
 $$
 
 and for the KL-divergence:
+
 $$
 D(p(x_1, \cdots, x_n)\|q(x_1, \cdots, x_n)) = \sum_{i=1}^{n} D(p(x_i\mid x_1,\cdots, x_{i-1})\|q(x_i\mid x_1, \cdots,x_{i-1}))
 $$
+
 ***Remark:*** To prove any of the chain rules, just
 
 1. write the quantity in question (be it entropy, divergence, or mutual information) as the expected value of a function of the joint distributions, 

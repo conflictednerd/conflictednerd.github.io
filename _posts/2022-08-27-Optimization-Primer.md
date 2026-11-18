@@ -70,11 +70,13 @@ Notice that in this section we are concerned with <u>unconstrained problems</u>.
 ### First Order Optimality Condition
 
 **Theorem:** Suppose
+
 $$
 f \in
 \mathcal{C}
 ^1(\mathbb{R}^n)
 $$
+
 (it's differentiable with a smooth derivative) and that $$x^{*}$$ is a local minimizer of $f$. Then, $$x^{*}$$ is a stationary point for $f$, i.e., the gradient of $f$ at $$x^{*}$$ is zero.
 
 $$
@@ -94,6 +96,7 @@ We also have a second order sufficient condition:
 **Theorem:** Suppose $f\in \mathcal{C}^2(\mathbb{R}^n)$ and that $$x^{*} \in \mathbb{R}^n$$ is such that $$\nabla f(x^{*} ) = 0$$ and $$\nabla^2f(x^{*})$$ is <u>positive-definite</u>. Then, $$x^{*}$$ is surely a local minimizer of $f$.
 
 **An Aside:** Remember that $\nabla^2f(x)$ is a matrix, called the *Hessian*, defined as
+
 $$
 \nabla^2 f(x) =
 \begin{bmatrix}
@@ -102,6 +105,7 @@ $$
 &\frac{\partial^2 f}{\partial x_n \partial x_1}(x), \cdots, &\frac{\partial^2 f}{\partial x_n^2}(x)
 \end{bmatrix}.
 $$
+
 Notice that the Hessian matrix is always symmetric. This is particularly convenient, as it means that the Hessian is diagonalizable and its eigenvectors can be chosen to be orthonormal.
 
 **Another Aside:** Remember that a <u>symmetric</u> matrix $M$ is called positive-definite if for all vectors $x\in \mathbb{R}^n \backslash \\{0 \\}$, we have $x^TMx > 0$. Similarly, $M$ is positive-semidefinite if $x^TMx \geqslant 0$.  
@@ -150,17 +154,21 @@ Line-search methods work by first finding a descent direction $s_k\in\mathbb{R}^
 **Descent Direction:** A descent direction is a vector $s_k$ that if we take a sufficiently small step in its direction, will take us to a point where the value of $f$ is smaller. $-\nabla f(x_k)$ is one such direction that we can use. Generally speaking, any vector $s_k$ that satisfies $\nabla f(x_k)^T s_k < 0$ is a descent direction (Think of directional derivatives!). 
 
 **Step Size:** Given a direction $s_k$, we now have to compute a step-size $\alpha_k>0$ along $s_k$ such that
+
 $$
 f(x_k + \alpha_k s_k) < f(x_k).
 $$
+
 Because $s_k$ is a descent direction, we know that a very small step size will satisfy the above inequality. But we also want the step size to be as large as possible, so that we converge faster. Fundamentally, line-search is a method for selecting an appropriate step size. So, we will first discuss the line-search methods for finding good step-sizes, and then talk about the choice of the descent direction (steepest descent is not always the best choice!).
 
 ### Exact Line-search
 
 Exact line-search finds the optimal step-size by solving an inner single-variable optimization
+
 $$
 \alpha_k = \arg \min_{\alpha>0} f(x_k + \alpha s_k).
 $$
+
 This step size is optimal in the sense that $\alpha_k s_k$ is the most decreasing step we can take in the direction of $s_k$. Additionally, this is a single variable optimization (the only variable is $\alpha$) which is easier to solve than the full optimization that we had before. Unfortunately, repeatedly solving this inner optimization is computationally expensive for non-linear objectives.
 
 **An Aside:** Conceptually, think of exact line-search as a method that shrinks the search space from $\mathbb{R}^n$ to a single line. What the full exact line-search does is finding a promising line in $\mathbb{R}^n$ and searching along it to find a better solution.
@@ -170,9 +178,11 @@ This step size is optimal in the sense that $\alpha_k s_k$ is the most decreasin
 Inexact line-search uses an step-size that may not be optimal, but is "good enough", i.e., taking a step of that size will decrease $f$ by a "sufficient amount", proportional to $\alpha_k$ and $\nabla f(x_k)^Ts_k$.
 
 One way of defining this sufficient amount is by using the **Armijo condition**. Let $\Phi_k (\alpha) := f(x_k + \alpha s_k)$. The Armijo condition requires that 
+
 $$
 \Phi_k(\alpha_k) \leqslant y_\beta(\alpha_k) := \Phi_k(0) + \beta\alpha_k\Phi'(0),
 $$
+
 for some $\beta \in (0, 1)$.
 
 An algorithm that uses the Armijo condition will start with some large, initial step size $\alpha_k$, and backtracks (binary search style!) to find an $\alpha_k$ that satisfies the above condition. (*What should the initial step size be? Sometimes we just start with 1 agnostically, but there are some very interesting methods for "guessing" a good starting value!*)
@@ -190,9 +200,11 @@ The figure below may be helpful to better understand this. Notice that $\Phi(\al
 Choosing $s_k$ to be the negative gradient and using any line-search method will give an algorithm that is often called the **method of steepest descent**. Notice that the line-search, be it exact or with Armijo-like conditions, is key here, as it allows us to show some nice convergence properties. The next theorem, showcases this.
 
 **Theorem:** Let $f$ be sufficiently smooth (i.e., $\nabla f$ is Lipschitz continuous) and bounded from below. The method of steepest descent globally converges, meaning that
+
 $$
 \|\nabla f(x_k)\| \to 0 \;\; \mathrm{as} \;\; k \to \infty.
 $$
+
 Although steepest descent (SD) converges, it does so slowly. This is because SD is scale-dependent. Look at the Contour plots below and the evolution of the SD solution. In the first plot, SD (exact line-search) is able to find the minimizer in one step. However, if the problem becomes slightly ill-conditioned, as is in the second plot, it will take much longer for SD to converge.
 
 <img src="/assets/img/blog/sd1.png" style="zoom:20%;" /><img src="/assets/img/blog/sd2.png" style="zoom:20%;" />
@@ -214,13 +226,17 @@ $$
 Now, if we want to minimize this function (subject to $\|s\| = \|\nabla f(x_k)\|$ to bound the values from below), we should let $s=-\nabla f(x_k)$. Therefore, the negative gradient direction was selected as the direction that minimizes the local linear model that we chose for $f$.
 
 The idea behind Newton's method is to use a second order approximation to $f$. Suppose $B_k$ is a symmetric positive-definite matrix and that we choose to locally approximate $f$ by
+
 $$
 m_k(s) = f(x_k) + \nabla f(x_k)^T s +\frac{1}{2}s^TB_ks.
 $$
+
 Because $B_k$ is positive-definite, this quadratic function has a unique minimum that can be found by:
+
 $$
 \nabla_s m_k(s^{*} ) = 0 \implies -\nabla f(x_k) = B_ks^{*} .
 $$
+
 So, to find the direction of descent we must solve this system of linear equations for $s^{*} $.
 
 One question remains, how should we choose $B_k$? First, notice that we need $B_k$ to be positive-definite to guarantee that $s^{*}$ is a descent direction:
@@ -240,9 +256,11 @@ However, the Hessian need not be positive-definite, it may be that its positive-
 #### Modified Newton Method
 
 When the Hessian is not positive-definite, we can "perturb" it a little so that it becomes sufficiently positive definite. In modified Newton method the descent direction is found by solving a slightly different system of linear equaitons:
+
 $$
 (\nabla^2 f(x_k) + M_k)s_k = -\nabla f(x_k),
 $$
+
 where $M_k$ is chosen such that $\nabla^2 f(x_k) + M_k$ is "sufficiently" positive-definite. Here, we will not get into the details of computing $M_k$.
 
 This allows Newton's method to be used with general objectives that don't necessarily have positive-definite Hessians. However, we still need some additional assumptions to guarantee their global convergence.
@@ -275,25 +293,31 @@ This wraps-up our discussion of line-search methods.
 The basic idea behind line-search methods is "I know which direction I want to go, find me the largest step I can take in that direction to ensure sufficient progress in minimizing $f$". Trust-region methods take the opposite approach; their methodology is "I know the maximum step size I want to take, find me the best direction to follow". This nicely illustrates the main idea behind trust-region methods as well as its differences compared to line-search methods.
 
 Let's begin our discussion of trust-region methods (TR). Similar to line-search, we begin by approximating $f(x_k + s)$ by a quadratic model
+
 $$
 m_k(s) = f(x_k) + \nabla f(x_k)^T s + \frac{1}{2} s^T B_k s,
 $$
+
 where $B_k$ is some symmetric (but not necessarily positive-definite) approximation of $\nabla^2 f(x_k)$. This model has two possible issues:
 
 1. It may not resemble $f(x_k +s)$ for large values of $s$,
 2. It may be unbounded from below: if $m_k$ is not convex, it will be unbounded and we can't meaningfully talk about minimize it.
 
 Trust-region methods prevent bad approximations by "trusting" the model only in a *trust region*, defined by the trust-region constraint
+
 $$
 \|s\| \leqslant \Delta_k
 $$
+
 for some appropriate radius $\Delta_k$.  
 This constraint also addresses the second issue by not allowing the model to be unbounded.
 
 **The Trust-region Subproblem:** We refer to the minimization of the model subject to the trust region constraint as the trust-region subproblem:
+
 $$
 \min_{s\in \mathbb{R}^n} m_k(s) \;\;\mathrm{subject\;to} \;\; \|s\| \leqslant \Delta_k
 $$
+
 Notice that here, unlike in line-search, the model may be non-convex.
 
 **Solving The Trust-region Subproblem:**
@@ -306,17 +330,23 @@ There are various efficient ways for computing (or approximating) the solution o
 Now, let's assume that we have the solution $s_k$ to the trust-region subproblem. How should we use it to take an optimization step?
 
 The *predicted model decrease* from taking the step $s_k$ is
+
 $$
 m_k(0) - m_k(s_k) = f(x_k) - m_k(s_k).
 $$
+
 The *actual function decrease* is 
+
 $$
 f(x_k) - f(x_k + s_k).
 $$
+
 Consider the ratio of these two
+
 $$
 \rho_k := \frac{f(x_k) - f(x_k + s_k)}{f(x_k) - m_k(s_k)}.
 $$
+
 If in the current trust-region $m_k$ is a good model for $f$, we expect $\rho_k$ to be close to $1$. If $\rho_k$ is much smaller than $1$, it means that our trust region is too large and the model can not accurately approximate $f$ in this region. This means that we have to decrease the radius of the trust region. So, the trust region radius $\Delta_k$ will be updated based on $\rho_k$:
 
 + If $\rho_k$ is not too smaller than $1$, take an optimization step $x_{k+1} = x_{k} + s_k$ and increase the trust region radius, $\Delta_{k+1} \geqslant \Delta_k$.
